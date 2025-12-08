@@ -1,0 +1,17 @@
+[project]
+name = "open-rigs"
+version = "0.1.0"
+description = "Environment to generate and extend shared and reuseable schemas and a DSL for open-rigs experiments"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.12.3",
+    "pydantic-yaml>=1.6.0",
+    "swc-aeon-rigs",
+]
+
+[tool.ruff]
+line-length = 108
+
+[tool.uv.sources]
+swc-aeon-rigs = { git = "https://github.com/SainsburyWellcomeCentre/aeon_swc_rigs.git" }
