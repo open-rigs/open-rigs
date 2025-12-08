@@ -1,5 +1,4 @@
 from typing import Annotated
-from pydantic.types import NoneType
 from pydantic import Field
 
 SByte = Annotated[int, Field(ge=-128, le=127)]
