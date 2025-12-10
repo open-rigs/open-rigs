@@ -3,13 +3,9 @@
 # Import core types
 from typing import Literal
 from pydantic import Field
+import open_rigs.rigs.types as Types
 
 from open_rigs.rigs.base import BaseSchema, Device
-
-class Vector3(BaseSchema):
-    x: float = Field(default=0, description="X coordinate of the point")
-    y: float = Field(default=0, description="Y coordinate of the point")
-    z: float = Field(default=0, description="Z coordinate of the point")
 
 class DisplayIntrinsics(BaseSchema):
     frame_width: int = Field(default=1920, ge=0, description="Frame width (px)")
