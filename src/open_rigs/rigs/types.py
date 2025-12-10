@@ -1,5 +1,11 @@
 from typing import Annotated
 from pydantic import Field
+from open_rigs.rigs.base import BaseSchema
+
+class Vector3(BaseSchema):
+    x: float = Field(description="X coordinate of the point")
+    y: float = Field(description="Y coordinate of the point")
+    z: float = Field(description="Z coordinate of the point")
 
 SByte = Annotated[int, Field(ge=-128, le=127)]
 Byte = Annotated[int, Field(ge=0, le=255)]

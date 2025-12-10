@@ -1,9 +1,9 @@
-from typing import ClassVar, Literal
+from typing import ClassVar, Literal, Dict
 from pydantic import Field
 from open_rigs.rigs.base import Device
-from swc.aeon.rigs.harp import HarpDevice
-from swc.aeon.rigs.harp import HarpBehavior
+from swc.aeon.rigs.harp import HarpDevice, HarpBehavior
 import open_rigs.rigs.controllers as Controllers
+import open_rigs.rigs.displays as Displays
 
 class SerialDevice(Device):
     """A base class for creating serial device models."""
@@ -54,3 +54,13 @@ class ArduinoDevice(SerialDevice):
     sampling_interval: int = Field(description="Sampling interval, in milliseconds, between analog and I2C measurements.")
 
     led_driver: Controllers.LedDriver | None = Field(default=None, description="Optional LedDriver module for generating digital output pulses.")
+
+class Screen(Device):
+    device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
+    display_index: int = Field(default=1, description="Display index")
+    target_render_frequency: float = Field(default=60, description="Target render frequency")
+    target_update_frequency: float = Field(default=120, description="Target update frequency")
+    texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
+    calibration: Dict[str, Displays.DisplayCalibration] | None = Field(default=None,description="Calibration parameters for a set of named display monitors for visual stimuli")
+    brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
+    contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
