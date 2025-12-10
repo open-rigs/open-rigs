@@ -17,8 +17,8 @@ class SerialDeviceModule(SerialDevice):
     Mirrors all externalized properties of SerialDevice.bonsai, including
     port configuration, framing, buffer settings, and parsing pattern.
     """
-    pattern: str = Field(default="",description="Pattern used to parse each incoming serial line (same syntax as Bonsai Parse/ScanPattern).")
-
+    pattern: str = Field(examples=["%d"],description="Pattern used to parse each incoming serial line (same syntax as Bonsai Parse/ScanPattern).")
+    seperator: str = Field(examples=[","],description="Seperator used to parse each incoming serial line (same syntax as Bonsai Parse/ScanPattern).")
     encoding: str | None = Field(default=None, description="Optional text encoding for interpreting incoming bytes.")
     new_line: str = Field(default="\r\n", description="Line termination sequence used to delimit incoming messages.")
     parity: str = Field(default="None", description="Parity checking mode for the serial port.")
