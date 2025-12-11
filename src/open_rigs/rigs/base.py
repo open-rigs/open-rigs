@@ -1,4 +1,3 @@
-# open_rigs/base.py
 from typing import Optional, Any
 from pydantic import Field, BaseModel
 from swc.aeon.rigs.base import BaseSchema as AeonBaseSchema
