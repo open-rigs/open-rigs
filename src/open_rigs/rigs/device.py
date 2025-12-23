@@ -1,6 +1,7 @@
 from typing import ClassVar, Literal, Dict
 from pydantic import Field
 from open_rigs.rigs.base import Device
+import open_rigs.rigs.data_types as data_types
 from swc.aeon.rigs.harp import HarpDevice, HarpBehavior
 import open_rigs.rigs.controllers as Controllers
 import open_rigs.rigs.displays as Displays
@@ -15,7 +16,7 @@ class SerialDeviceModule(SerialDevice):
     """Represents the SerialDevice workflow module.
 
     Mirrors all externalized properties of SerialDevice.bonsai, including
-    port configuration, framing, buffer settings, and parsing pattern.
+    port configuration, framing and buffer settings.
     """
     encoding: str | None = Field(default=None, description="Optional text encoding for interpreting incoming bytes.")
     new_line: str = Field(default="\r\n", description="Line termination sequence used to delimit incoming messages.")
@@ -52,6 +53,23 @@ class LedDriver(ArduinoDevice):
     """Represents an Arduino device used to drive LEDs."""
     device_type: Literal["LedDriver"] = "LedDriver"
     led_controller: Controllers.LedController = Field(description="LedController module for generating digital output pulses.")
+
+class LickSpoutStageDriver(ArduinoDevice):
+    """Represents an Arduino device driving stepper motors controlling a lick spout stage."""
+    device_type: Literal["LickSpoutStageDriver"] = "LickSpoutStageDriver"
+    
+     # Protocol command bytes
+    byte_move: data_types.Byte = Field(default=71, description="Command byte for MOVE.")
+    byte_set_speed: data_types.Byte = Field(default=72, description="Command byte for SET SPEED.")
+    byte_set_acceleration: data_types.Byte = Field(default=73, description="Command byte for SET ACCELERATION.")
+    
+    # Motion parameters
+    speed: int = Field(default=300, description="Default motor speed.")
+    accel_major: int = Field(default=20, description="Major acceleration component.")
+    accel_minor: int = Field(default=2, description="Minor acceleration component.")
+
+    # Set positions
+    set_positions: data_types.SpoutRigPosition 
 
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
