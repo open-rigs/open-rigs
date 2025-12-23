@@ -47,8 +47,7 @@ class BehaviorBoard(HarpBehavior):
     running_wheel: Controllers.RunningWheelModule | None = Field(default=None, description="Optional RunningWheelModule module to define wheel geometry.")
 
 class ArduinoDevice(SerialDevice):
-    """Represents an Arduino serial device used in Bonsai workflows."""
-    device_type: Literal["Arduino"] = "Arduino"
+    """Represents a base class for Arduino serial devices used in Bonsai workflows."""
     sampling_interval: int = Field(description="Sampling interval, in milliseconds, between analog and I2C measurements.")
 
     led_driver: Controllers.LedDriver | None = Field(default=None, description="Optional LedDriver module for generating digital output pulses.")
