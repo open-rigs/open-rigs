@@ -48,7 +48,10 @@ class ArduinoDevice(SerialDevice):
     """Represents a base class for Arduino serial devices used in Bonsai workflows."""
     sampling_interval: int = Field(description="Sampling interval, in milliseconds, between analog and I2C measurements.")
 
-    led_driver: Controllers.LedDriver | None = Field(default=None, description="Optional LedDriver module for generating digital output pulses.")
+class LedDriver(ArduinoDevice):
+    """Represents an Arduino device used to drive LEDs."""
+    device_type: Literal["LedDriver"] = "LedDriver"
+    led_controller: Controllers.LedController = Field(description="LedController module for generating digital output pulses.")
 
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
