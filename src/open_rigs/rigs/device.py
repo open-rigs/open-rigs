@@ -40,8 +40,6 @@ class LicketySplit(HarpDevice):
 class BehaviorBoard(HarpBehavior):
     """Represents a Harp Behavior Board device."""
     device_type: Literal["BehaviorBoard"] = "BehaviorBoard"
-    who_am_i: ClassVar[int] = 1216
-
     pulse_controller: Controllers.PulseController | None = Field(default=None, description="Optional PulseController module for generating digital output pulses.")
     camera_controller: Controllers.CameraController | None = Field(default=None, description="Optional CameraController module for emitting camera trigger pulses.")
     running_wheel: Controllers.RunningWheelModule | None = Field(default=None, description="Optional RunningWheelModule module to define wheel geometry.")
