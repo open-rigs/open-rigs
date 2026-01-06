@@ -2,7 +2,7 @@ from typing import ClassVar, Literal, Dict
 from pydantic import Field
 from open_rigs.rigs.base import Device
 import open_rigs.rigs.data_types as data_types
-from swc.aeon.rigs.harp import HarpDevice, HarpBehavior
+from swc.aeon.rigs.harp import HarpDevice, HarpBehavior #TODO recapitulate these in our own harp.py
 import open_rigs.rigs.controllers as Controllers
 import open_rigs.rigs.displays as Displays
 
