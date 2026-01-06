@@ -37,6 +37,14 @@ class LicketySplit(HarpDevice):
     """Represents a Harp LicketySplit device."""
     device_type: Literal["LicketySplit"] = "LicketySplit"
     who_am_i: ClassVar[int] = 1400
+    channel0_trigger_threshold: data_types.UShort = Field(
+        default=0,
+        description="ADC threshold above which Channel 0 triggers a lick"
+    )
+    channel0_untrigger_threshold: data_types.UShort = Field(
+        default=0,
+        description="ADC threshold below which Channel 0 untriggers a lick"
+    )
 
 class BehaviorBoard(HarpBehavior):
     """Represents a Harp Behavior Board device."""
