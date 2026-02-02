@@ -1,13 +1,15 @@
-from typing import ClassVar, Literal
+from typing import ClassVar, Literal, Dict
 from pydantic import Field
 from open_rigs.rigs.base import Device
-from swc.aeon.rigs.harp import HarpDevice
-from swc.aeon.rigs.harp import BehaviorBoard as HarpBehaviorBoard
+from swc.aeon.rigs.harp import HarpDevice, HarpBehavior
 import open_rigs.rigs.controllers as Controllers
+import open_rigs.rigs.displays as Displays
 
 class SerialDevice(Device):
     """A base class for creating serial device models."""
+    device_type: Literal["SerialDevice"] = "SerialDevice"
     port_name: str = Field(examples=["COMx"], description="The name of the device serial port.")
+    baud_rate: int = Field(default=9600, description="Baud rate for serial communication.")
 
 class SerialDeviceModule(SerialDevice):
     """Represents the SerialDevice workflow module.
@@ -15,7 +17,8 @@ class SerialDeviceModule(SerialDevice):
     Mirrors all externalized properties of SerialDevice.bonsai, including
     port configuration, framing, buffer settings, and parsing pattern.
     """
-    baud_rate: int = Field(default=9600, description="Baud rate for serial communication.")
+    pattern: str = Field(default="",description="Pattern used to parse each incoming serial line (same syntax as Bonsai Parse/ScanPattern).")
+
     encoding: str | None = Field(default=None, description="Optional text encoding for interpreting incoming bytes.")
     new_line: str = Field(default="\r\n", description="Line termination sequence used to delimit incoming messages.")
     parity: str = Field(default="None", description="Parity checking mode for the serial port.")
@@ -36,7 +39,7 @@ class LicketySplit(HarpDevice):
     device_type: Literal["LicketySplit"] = "LicketySplit"
     who_am_i: ClassVar[int] = 1400
 
-class BehaviorBoard(HarpBehaviorBoard):
+class BehaviorBoard(HarpBehavior):
     """Represents a Harp Behavior Board device."""
     device_type: Literal["BehaviorBoard"] = "BehaviorBoard"
     who_am_i: ClassVar[int] = 1216
@@ -48,7 +51,16 @@ class BehaviorBoard(HarpBehaviorBoard):
 class ArduinoDevice(SerialDevice):
     """Represents an Arduino serial device used in Bonsai workflows."""
     device_type: Literal["Arduino"] = "Arduino"
-    baud_rate: int = Field(alias="BaudRate", description="Baud rate for the Arduino serial connection.")
-    sampling_interval: int = Field(alias="SamplingInterval", description="Sampling interval, in milliseconds, between analog and I2C measurements.")
+    sampling_interval: int = Field(description="Sampling interval, in milliseconds, between analog and I2C measurements.")
 
     led_driver: Controllers.LedDriver | None = Field(default=None, description="Optional LedDriver module for generating digital output pulses.")
+
+class Screen(Device):
+    device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
+    display_index: int = Field(default=1, description="Display index")
+    target_render_frequency: float = Field(default=60, description="Target render frequency")
+    target_update_frequency: float = Field(default=120, description="Target update frequency")
+    texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
+    calibration: Dict[str, Displays.DisplayCalibration] | None = Field(default=None,description="Calibration parameters for a set of named display monitors for visual stimuli")
+    brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
+    contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
