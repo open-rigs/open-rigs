@@ -28,7 +28,7 @@ In general, lab members and experimentalists will only encounter these repositor
 - A **shared contract** that acquisition workflows and experiments (and later, analysis pipelines) can rely on
 - A **reference implementation** for how rigs should be described in open-rigs projects
 
-The repository is deliberately *not* experiment-specific and does not contain task logic or analysis code.
+The repository is deliberately *not* experiment-specific and does not contain task logic or Bonsai code.
 
 ---
 
@@ -45,9 +45,8 @@ Instead, it aims to describe rigs in a way that is reusable, extensible, machine
 
 ## Repository structure (conceptual)
 
-While details may evolve, the repository generally contains:
+While details may evolve, the repository contains:
 
-- **Rig definitions** – structured descriptions of complete rigs
 - **Component definitions** – cameras, DAQs, lasers, stages, etc.
 - **Schemas** – formal validation of rig and component structure
 - **Examples** – minimal, concrete rigs demonstrating best practice
