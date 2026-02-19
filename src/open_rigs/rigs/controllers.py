@@ -1,4 +1,4 @@
-from typing import ClassVar, Literal, List
+from typing import List
 from pydantic import Field
 from open_rigs.rigs.base import BaseSchema
 from open_rigs.rigs.data_types import UShort 

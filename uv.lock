@@ -734,6 +734,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-yaml" },
     { name = "pytest" },
+    { name = "ruff" },
     { name = "swc-aeon-rigs" },
 ]
 
@@ -759,6 +760,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
     { name = "pytest-mock", marker = "extra == 'dev'" },
+    { name = "ruff" },
     { name = "ruff", marker = "extra == 'dev'" },
     { name = "swc-aeon-rigs", git = "https://github.com/SainsburyWellcomeCentre/aeon_swc_rigs.git" },
 ]

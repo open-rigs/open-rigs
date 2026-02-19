@@ -1,11 +1,10 @@
 # TODO - this should live in open-rigs general definitions
 
 # Import core types
-from typing import Literal
 from pydantic import Field
 import open_rigs.rigs.data_types as Types
 
-from open_rigs.rigs.base import BaseSchema, Device
+from open_rigs.rigs.base import BaseSchema
 
 class DisplayIntrinsics(BaseSchema):
     frame_width: int = Field(default=1920, ge=0, description="Frame width (px)")
