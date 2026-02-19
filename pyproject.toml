@@ -15,6 +15,17 @@ dependencies = [
     "pytest"
 ]
 
+[project.optional-dependencies]
+dev = [
+  "pandas-stubs",
+  "pre-commit",
+  "pyright",
+  "pytest",
+  "pytest-cov",
+  "pytest-mock",
+  "ruff",
+]
+
 [tool.ruff]
 line-length = 108
 
