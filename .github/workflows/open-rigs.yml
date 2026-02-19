@@ -38,3 +38,38 @@ jobs:
         # -------------------------------------------------------- Checkout
             - name: Checkout
               uses: actions/checkout@v5
+
+        # -------------------------------------------------------- Set up tools
+            - name: Install uv and set Python version
+              uses: astral-sh/setup-uv@v7
+              with:
+                python-version: ${{ matrix.python-version }}
+
+        # -------------------------------------------------------- Configure build
+            - name: Install the project
+              run: uv sync --locked --all-extras --dev
+
+        # -------------------------------------------------------- Build
+            - name: ruff
+              run: uv run ruff check .
+
+            - name: pyright
+              run: uv run pyright --level error --project ./pyproject.toml .
+
+            - name: Build
+              run: uv build
+
+        # -------------------------------------------------------- Test
+            - name: Run tests
+              run: uv run pytest tests/ --cov-report term ${{ matrix.codecov }}
+
+        # -------------------------------------------------------- Coverage report
+            - name: Upload test coverage report to codecov
+              if: ${{ matrix.codecov }}
+              uses: codecov/codecov-action@v5
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }}
+                directory: tests/test_coverage/
+                files: test_coverage_report.xml
+                fail_ci_if_error: true
+                verbose: true
