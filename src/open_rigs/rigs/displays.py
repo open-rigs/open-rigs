@@ -3,7 +3,7 @@
 # Import core types
 from typing import Literal
 from pydantic import Field
-import open_rigs.rigs.types as Types
+import open_rigs.rigs.data_types as Types
 
 from open_rigs.rigs.base import BaseSchema, Device
 
