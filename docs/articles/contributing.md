@@ -104,11 +104,11 @@ Fence code with triple backticks and a language identifier for syntax highlighti
 
 For example: 
 
-````markdown
+```` markdown
 ```python
 from open_rigs.rigs.base import BaseSchema
 ```
-```
+````
 
 ### Images
 
