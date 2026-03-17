@@ -1,4 +1,4 @@
-**.bonsai/
+**/.bonsai/
 !.bonsai/Bonsai.config
 !.bonsai/Nuget.config
 **__pycache__**
