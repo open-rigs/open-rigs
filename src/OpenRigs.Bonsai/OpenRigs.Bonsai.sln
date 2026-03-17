@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Bonsai.Core", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Bonsai.Devices", "src\OpenRigs.Bonsai.Devices\OpenRigs.Bonsai.Devices.csproj", "{A7911D56-69A0-4795-BCDA-80D4EEC22C26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Bonsai.Logging", "src\OpenRigs.Bonsai.Logging\OpenRigs.Bonsai.Logging.csproj", "{3C144DCB-1F43-4C35-BCEC-FBC7650B1BEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{A7911D56-69A0-4795-BCDA-80D4EEC22C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7911D56-69A0-4795-BCDA-80D4EEC22C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7911D56-69A0-4795-BCDA-80D4EEC22C26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C144DCB-1F43-4C35-BCEC-FBC7650B1BEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C144DCB-1F43-4C35-BCEC-FBC7650B1BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C144DCB-1F43-4C35-BCEC-FBC7650B1BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C144DCB-1F43-4C35-BCEC-FBC7650B1BEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
