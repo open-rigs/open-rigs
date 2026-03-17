@@ -64,9 +64,11 @@ class SpoutRigPosition(BaseSchema):
         ],
     )
 
-class Vector3(BaseSchema):
+class Vector2(BaseSchema):
     x: float = Field(description="X coordinate of the point.")
     y: float = Field(description="Y coordinate of the point.")
+
+class Vector3(Vector2):
     z: float = Field(description="Z coordinate of the point.")
 
 class SoftwareEvent(BaseSchema, Generic[TData]):
@@ -81,7 +83,8 @@ class SoftwareEvent(BaseSchema, Generic[TData]):
     data: TData | None = Field(default=None,description="The data payload of the event.")
 
 class DataTypes(BaseSchema):
-    vector3 : Vector3 
+    vector2: Vector2
+    vector3: Vector3 
     software_event : SoftwareEvent
     spout_rig_position: SpoutRigPosition
 
