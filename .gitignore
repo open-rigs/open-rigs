@@ -3,3 +3,8 @@
 !.bonsai/Nuget.config
 **__pycache__**
 **obj**
+.vscode/
+
+src/open_rigs.egg-info/
+
+build/
