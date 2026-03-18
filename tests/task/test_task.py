@@ -1,6 +1,6 @@
 import pytest
 from pydantic import Field
-from open_rigs.rigs.task import TaskParameters
+from open_rigs.task import TaskParameters
 
 class TaskParametersImplementation(TaskParameters):
     test_parameter: int = Field(default=27, description="A test integer parameter")

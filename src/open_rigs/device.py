@@ -1,10 +1,10 @@
 from typing import ClassVar, Literal, Dict
 from pydantic import Field
-from open_rigs.rigs.base import Device
-import open_rigs.rigs.data_types as data_types
-from open_rigs.rigs.harp import HarpDevice, HarpBehavior
-import open_rigs.rigs.controllers as Controllers
-import open_rigs.rigs.displays as Displays
+from open_rigs.base import Device
+import open_rigs.data_types as data_types
+from open_rigs.harp import HarpDevice, HarpBehavior
+import open_rigs.controllers as Controllers
+import open_rigs.displays as Displays
 
 class SerialDevice(Device):
     """A base class for creating serial device models."""

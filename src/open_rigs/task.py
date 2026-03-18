@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import Field
 
-from open_rigs.rigs.base import BaseSchema
+from open_rigs.base import BaseSchema
 
 class TaskParameters(BaseSchema):
     rng_seed: Optional[float] = Field(default=None, description="Seed of the random number generator for these task parameters")
