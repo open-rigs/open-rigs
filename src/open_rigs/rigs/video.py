@@ -1,11 +1,10 @@
 from typing import Union, Literal, Annotated
-from pydantic import Field, ConfigDict, RootModel
+from pydantic import Field, RootModel
 from open_rigs.rigs.base import BaseSchema
 
 
 class CameraBase(BaseSchema):
     """Base class for discriminated camera configurations."""
-    model_config = ConfigDict(discriminator="camera_type")
 
     camera_type: str = Field(description="Discriminator for the camera model type.")
 
