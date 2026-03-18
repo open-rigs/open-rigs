@@ -2,7 +2,7 @@
   "profiles": {
     "Bonsai": {
       "commandName": "Executable",
-      "executablePath": "$(ProjectDir)../../../../.bonsai/Bonsai.exe",
+      "executablePath": "bonsai",
       "commandLineArgs": "--lib:\"$(TargetDir).\"",
       "nativeDebugging": true
     }
