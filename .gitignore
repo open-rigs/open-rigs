@@ -1,18 +1,16 @@
-**/.bonsai/Settings/
-**/.bonsai/Packages/
-**/.bonsai/*.exe
-**/.bonsai/*.ps1
-**/.bonsai/*.cmd
-**/obj/
-**/bin/
-!.bonsai/Bonsai.config
-!.bonsai/Nuget.config
-**__pycache__**
-**obj**
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+dist/
+_version.py
+*.egg-info/
+*.egg
+/artifacts/
+
+# IDE
+.vs/
 .vscode/
-
-src/open_rigs.egg-info/
-
-build/
-
-*.settings
+**/.bonsai/*
+!**/.bonsai/Bonsai.config
+!**/.bonsai/NuGet.config

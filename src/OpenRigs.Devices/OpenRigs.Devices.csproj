@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenRigs.Bonsai.Core\OpenRigs.Bonsai.Core.csproj" />
+    <ProjectReference Include="..\OpenRigs.Core\OpenRigs.Core.csproj" />
   </ItemGroup>
 
 </Project>

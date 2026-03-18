@@ -19,8 +19,4 @@
     <PackageReference Include="Harp.Behavior" Version="0.2.0" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="&#xD;&#xA; dotnet tool restore&#xD;&#xA; dotnet tool run bonsai.sgen $(ProjectDir)..\..\..\open_rigs\schemas\data_types.json --namespace OpenRigs.Core.DataTypes -n DataTypes.Generated.cs --serializer json" />
-  </Target>
-
 </Project>

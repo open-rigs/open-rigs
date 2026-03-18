@@ -1,2 +1,0 @@
-# OpenRigs Bonsai
-
