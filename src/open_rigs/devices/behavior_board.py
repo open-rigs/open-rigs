@@ -1,7 +1,8 @@
 from typing import List
 from pydantic import Field
-from open_rigs.base import BaseSchema
-from open_rigs.data_types import UShort 
+from open_rigs.core.base import BaseSchema
+from open_rigs.devices.harp import HarpBehavior
+from open_rigs.core.data_types import UShort
 
 class CameraController(BaseSchema):
     """Represents a CameraController Module for a BehaviourBoard device.
@@ -32,6 +33,8 @@ class RunningWheelModule(BaseSchema):
     counts_per_rev: int = Field(description="Number of encoder counts per full revolution of the running wheel.")
     wheel_diameter_mm: float = Field( description="The diameter, in millimeters, of the running wheel.")
 
-class LedController(BaseSchema):
-    """Specifies the digital pin to control a single LED"""
-    digital_out_pin: int = Field(description="The digital output pin for this LED driver")
+class BehaviorBoard(HarpBehavior):
+    """Represents a Harp Behavior Board device."""
+    pulse_controller: PulseController | None = Field(default=None, description="Optional PulseController module for generating digital output pulses.")
+    camera_controller: CameraController | None = Field(default=None, description="Optional CameraController module for emitting camera trigger pulses.")
+    running_wheel: RunningWheelModule | None = Field(default=None, description="Optional RunningWheelModule module to define wheel geometry.")
