@@ -1,6 +1,6 @@
 from typing import Union, Literal, Annotated
 from pydantic import Field, RootModel
-from open_rigs.base import BaseSchema
+from open_rigs.core.base import BaseSchema
 
 
 class CameraBase(BaseSchema):
@@ -32,4 +32,3 @@ CameraModule = Annotated[
 class Camera(RootModel[CameraModule]):
     """Discriminated camera configuration (Arducam or Spinnaker)."""
     pass
-
