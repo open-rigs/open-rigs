@@ -1,5 +1,5 @@
 from pydantic import Field
-from open_rigs.core.base import BaseSchema
+from open_rigs.core import BaseSchema
 
 
 class SyncQuad(BaseSchema):

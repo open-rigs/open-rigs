@@ -1,15 +1,14 @@
 from typing import ClassVar, Literal
 from pydantic import Field
 from open_rigs.devices.harp import HarpDevice
-from open_rigs.core.base import Device
+from open_rigs.core import BaseSchema
 import open_rigs.core.data_types as data_types
 import open_rigs.devices.data_types as device_data_types
 
 
-class SerialDevice(Device):
+class SerialDevice(BaseSchema):
     """A base class for creating serial device models."""
 
-    device_type: Literal["SerialDevice"] = "SerialDevice"
     port_name: str = Field(examples=["COMx"], description="The name of the device serial port.")
     baud_rate: int = Field(default=9600, description="Baud rate for serial communication.")
 

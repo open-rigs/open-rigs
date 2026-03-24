@@ -1,6 +1,6 @@
 from typing import Union, Literal, Annotated
 from pydantic import Field, RootModel
-from open_rigs.core.base import BaseSchema
+from open_rigs.core import BaseSchema
 
 
 class CameraBase(BaseSchema):
