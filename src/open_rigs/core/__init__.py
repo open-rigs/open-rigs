@@ -1,3 +1,4 @@
+from open_rigs.core.base import DiscriminatorTypeMixin
 from open_rigs.core.data_types import (
     SByte,
     Byte,
@@ -20,6 +21,7 @@ from open_rigs.core.experiment import ExperimentSession
 from open_rigs.core.task import Task, TaskParameters
 
 __all__ = [
+    "DiscriminatorTypeMixin",
     "SByte",
     "Byte",
     "Short",
