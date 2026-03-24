@@ -1,6 +1,6 @@
 from typing import Dict
 from pydantic import Field
-from open_rigs.core import BaseSchema
+from swc.aeon.schema import BaseSchema
 
 
 class StepperPositions(BaseSchema):

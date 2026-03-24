@@ -1,6 +1,6 @@
 from typing import Union, Literal, Annotated
 from pydantic import Field, RootModel
-from open_rigs.core import BaseSchema
+from swc.aeon.schema import BaseSchema
 
 
 class CameraBase(BaseSchema):

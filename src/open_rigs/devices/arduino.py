@@ -1,5 +1,5 @@
 from pydantic import Field
-from open_rigs.core import BaseSchema
+from swc.aeon.schema import BaseSchema
 from open_rigs.devices.device import SerialDevice
 
 
