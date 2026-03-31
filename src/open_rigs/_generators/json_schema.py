@@ -3,7 +3,7 @@ from typing import Union
 import json
 import pydantic
 
-import open_rigs.core.data_types as _core_dt
+import open_rigs.core.base as _core_dt
 import open_rigs.devices.data_types as _dev_dt
 
 

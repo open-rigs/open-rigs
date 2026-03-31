@@ -2,7 +2,7 @@ from typing import ClassVar, Literal
 from pydantic import Field
 from open_rigs.devices.harp import HarpDevice
 from swc.aeon.schema import BaseSchema
-import open_rigs.core.data_types as data_types
+import open_rigs.core.base as data_types
 import open_rigs.devices.data_types as device_data_types
 
 

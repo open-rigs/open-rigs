@@ -1,5 +1,5 @@
 from open_rigs.core.base import DiscriminatorTypeMixin
-from open_rigs.core.data_types import (
+from open_rigs.core.base import (
     SByte,
     Byte,
     Short,

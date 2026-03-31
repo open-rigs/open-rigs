@@ -1,6 +1,6 @@
 from typing import Dict
 from pydantic import Field
-import open_rigs.core.data_types as Types
+import open_rigs.core.base as Types
 
 from swc.aeon.schema import BaseSchema
 
