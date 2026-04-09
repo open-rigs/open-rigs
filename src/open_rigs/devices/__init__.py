@@ -13,7 +13,6 @@ from open_rigs.devices.behavior_board import (
 from open_rigs.devices.data_types import SpoutRigPosition, StepperPositions
 from open_rigs.devices.device import (
     SerialDevice,
-    SerialDeviceModule,
     LicketySplit,
     LickSpoutStageDriver,
 )
@@ -38,7 +37,6 @@ __all__ = [
     "SpoutRigPosition",
     "StepperPositions",
     "SerialDevice",
-    "SerialDeviceModule",
     "LicketySplit",
     "LickSpoutStageDriver",
     "HarpDevice",
