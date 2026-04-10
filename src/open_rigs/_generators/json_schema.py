@@ -4,7 +4,6 @@ import json
 import pydantic
 
 import open_rigs.core.base as _core_dt
-import open_rigs.devices.data_types as _dev_dt
 
 
 def _collect_fields(*modules):
@@ -17,7 +16,7 @@ def _collect_fields(*modules):
     return fields
 
 
-DataTypes = pydantic.create_model("DataTypes", **_collect_fields(_core_dt, _dev_dt))
+DataTypes = pydantic.create_model("DataTypes", **_collect_fields(_core_dt))
 
 SCHEMA_ROOT = Path("./src/open_rigs/schemas")
 

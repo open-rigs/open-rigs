@@ -10,11 +10,12 @@ from open_rigs.devices.behavior_board import (
     RunningWheel,
     BehaviorBoard,
 )
-from open_rigs.devices.data_types import SpoutRigPosition, StepperPositions
 from open_rigs.devices.device import (
     SerialDevice,
     LicketySplit,
     LickSpoutStageDriver,
+    SpoutRigPosition,
+    StepperPositions,
 )
 from open_rigs.devices.harp import (
     HarpDevice,
