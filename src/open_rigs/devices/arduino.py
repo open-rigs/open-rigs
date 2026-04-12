@@ -1,6 +1,6 @@
 from pydantic import Field
 from swc.aeon.schema import BaseSchema
-from open_rigs.devices.device import SerialDevice
+from open_rigs.devices.serial import SerialDevice
 
 
 class ArduinoDevice(SerialDevice):

@@ -10,9 +10,9 @@ from open_rigs.devices.behavior_board import (
     RunningWheel,
     BehaviorBoard,
 )
-from open_rigs.devices.device import (
-    SerialDevice,
-    LicketySplit,
+from open_rigs.devices.serial import SerialDevice
+from open_rigs.devices.lickety_split import LicketySplit
+from open_rigs.devices.lick_spout_stage import (
     LickSpoutStageDriver,
     SpoutRigPosition,
     StepperPositions,
