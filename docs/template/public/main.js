@@ -4,7 +4,7 @@ export default {
     defaultTheme: 'light',
     iconLinks: [{
         icon: 'github',
-        href: 'https://github.com/open-rigs/rigs',
+        href: 'https://github.com/open-rigs/open-rigs',
         title: 'GitHub'
     }],
     start: () => {
