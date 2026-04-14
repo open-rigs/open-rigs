@@ -1,0 +1,3 @@
+[submodule "docs/openrigs-docfx"]
+	path = docs/openrigs-docfx
+	url = https://github.com/open-rigs/docfx-tools.git
