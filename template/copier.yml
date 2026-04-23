@@ -63,3 +63,9 @@ python_class_prefix:
   help: Internal Python class prefix (auto-generated)
   type: str
   when: false
+
+rigs_version:
+  type: str
+  default: "0.1.0"
+  help: Version of open-rigs/rigs packages to use (OpenRigs.* NuGet packages)
+  when: false
