@@ -19,24 +19,24 @@ One aim of this separation is to avoid redundant changes in schema files that wo
 ### Rig Schema
 > [!Note]
 > 
-> In this tutorial I have initiated the project with the name `initiation-example`. You will therefore see this name in multiple places in the code as it has been automatically inserted by the copier template, this will be different in your code depending what you have named your project, so be wary of directly copy-pasting from this tutorial as you may need to change references to the project name in some places.
+> In this tutorial I have initiated the project with the name `reaction-time`. You will therefore see this name in multiple places in the code as it has been automatically inserted by the copier template, this will be different in your code depending what you have named your project, so be wary of directly copy-pasting from this tutorial as you may need to change references to the project name in some places.
 
 In the project folder we created from the template, a Python module named for your project should have been created under `src\<your_project_name>` containing skeleton schema definition files `rig.py` and `task.py`. Let's first modify `rig.py` to define our rig schema:
 
 ```
-from typing import Literal
+from typing import Literal, Dict
 from pydantic import Field
 
-from open_rigs.rigs.base import BaseSchema
-from open_rigs.rigs.harp import HarpHobgoblin
-from open_rigs.rigs.device import Screen
+from open_rigs.core.rig import Rig
+from open_rigs.devices.harp import HarpHobgoblin
+from open_rigs.vision import Screen
 
-from open_rigs_implementation_example import __semver__
+from open_rigs_reaction_time import __semver__
 
 
-class OpenRigsImplementationExampleRig(BaseSchema):
+class OpenRigsReactionTimeRig(Rig):
     version: Literal[__semver__] = __semver__
-    harp_hobgoblin: HarpHobgoblin = Field(description="Harp hobgoblin device")
+    harp_hobgoblin: HarpHobgoblin = Field(description="Harp Hobgoblin device")
     screen: Screen = Field(description="The main display for visual stimuli")
 ```
 
