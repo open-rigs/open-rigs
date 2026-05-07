@@ -10,12 +10,12 @@ import datetime
 import os
 import git
 
-# from swc.aeon.schema import Experiment
-from open_rigs.rigs.experiment import Experiment
+from open_rigs.core.experiment import ExperimentSession
 
 # TODO - autofill experiment fields
 session = Experiment(
     subject_id="Plimbo",
+    session_id="001",
     workflow="main.bonsai",
     commit=git.Repo(search_parent_directories=True).head.object.hexsha,
     repository_url=""
