@@ -2,8 +2,8 @@ from pathlib import Path
 from typing import Union
 
 import pydantic
-from open_rigs.rigs.experiment import Experiment
-from aind_behavior_services.utils import BonsaiSgenSerializers, convert_pydantic_to_bonsai
+from open_rigs.core.experiment import Experiment
+from aind_behavior_services.schema import BonsaiSgenSerializers, convert_pydantic_to_bonsai
 
 import open_rigs_reaction_time.rig
 import open_rigs_reaction_time.task
@@ -11,7 +11,6 @@ import open_rigs_reaction_time.task
 SCHEMA_ROOT = Path("./src/DataSchemas/")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
 NAMESPACE_PREFIX = "OpenRigsReactionTimeDataSchema"
-
 
 def main():
     models = [
