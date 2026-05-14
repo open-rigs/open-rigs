@@ -3,10 +3,21 @@ import os
 from open_rigs_reaction_time.task import (
     OpenRigsReactionTimeTaskLogic,
     OpenRigsReactionTimeTaskParameters,
+    Trial
 )
 
 task_logic = OpenRigsReactionTimeTaskLogic(
-    task_parameters=OpenRigsReactionTimeTaskParameters(),
+    task_parameters=OpenRigsReactionTimeTaskParameters(
+        max_trial_time=60,
+        initial_delay_time=5,
+        trials=[
+            Trial(temporal_frequency=1, target_delay=1),
+            Trial(temporal_frequency=2, target_delay=2),
+            Trial(temporal_frequency=1, target_delay=1),
+            Trial(temporal_frequency=2, target_delay=2),
+            Trial(temporal_frequency=1, target_delay=1)
+        ]
+    ),
 )
 
 def main(path_seed: str = "./local/{schema}.json"):
