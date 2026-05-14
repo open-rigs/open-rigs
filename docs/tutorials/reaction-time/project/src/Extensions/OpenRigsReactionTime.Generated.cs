@@ -1072,6 +1072,8 @@ namespace OpenRigsReactionTimeDataSchema
     
         private double _initialDelayTime;
     
+        private double? _rngSeed;
+    
         public OpenRigsReactionTimeTaskParameters()
         {
             _trials = new System.Collections.Generic.List<Trial>();
@@ -1082,6 +1084,7 @@ namespace OpenRigsReactionTimeDataSchema
             _trials = other._trials;
             _maxTrialTime = other._maxTrialTime;
             _initialDelayTime = other._initialDelayTime;
+            _rngSeed = other._rngSeed;
         }
     
         /// <summary>
@@ -1139,6 +1142,23 @@ namespace OpenRigsReactionTimeDataSchema
             }
         }
     
+        /// <summary>
+        /// Seed of the random number generator for these task parameters
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("rngSeed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator for these task parameters")]
+        public double? RngSeed
+        {
+            get
+            {
+                return _rngSeed;
+            }
+            set
+            {
+                _rngSeed = value;
+            }
+        }
+    
         public System.IObservable<OpenRigsReactionTimeTaskParameters> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new OpenRigsReactionTimeTaskParameters(this)));
@@ -1153,7 +1173,8 @@ namespace OpenRigsReactionTimeDataSchema
         {
             stringBuilder.Append("Trials = " + _trials + ", ");
             stringBuilder.Append("MaxTrialTime = " + _maxTrialTime + ", ");
-            stringBuilder.Append("InitialDelayTime = " + _initialDelayTime);
+            stringBuilder.Append("InitialDelayTime = " + _initialDelayTime + ", ");
+            stringBuilder.Append("RngSeed = " + _rngSeed);
             return true;
         }
     
