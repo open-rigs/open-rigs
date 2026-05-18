@@ -36,6 +36,7 @@
       {
         "files": [
           "images/**",
+          "assets/**",
           "workflows/**/*.{bonsai,svg}",
           "{articles,tutorials,examples}/**/*.{bonsai,svg}"
         ]
@@ -52,7 +53,7 @@
       "template"
     ],
     "sitemap": {
-      "baseUrl": "https://open-rigs.github.io/rigs"
+      "baseUrl": "https://open-rigs.github.io/open-rigs"
     },
     "globalMetadata": {
       "_appName": "OpenRigs",
