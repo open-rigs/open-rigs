@@ -1,7 +1,6 @@
-import datetime
 import os
-import git
 
+import git
 from open_rigs.core.experiment import ExperimentSession
 
 session = ExperimentSession(

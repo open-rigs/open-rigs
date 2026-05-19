@@ -1,10 +1,6 @@
 import os
 
-from open_rigs_reaction_time.task import (
-    OpenRigsReactionTimeTaskLogic,
-    OpenRigsReactionTimeTaskParameters,
-    Trial
-)
+from open_rigs_reaction_time.task import Trial, OpenRigsReactionTimeTaskLogic, OpenRigsReactionTimeTaskParameters
 
 task_logic = OpenRigsReactionTimeTaskLogic(
     task_parameters=OpenRigsReactionTimeTaskParameters(

@@ -1,14 +1,10 @@
 import os
 
-from open_rigs.vision import DisplayCalibration, DisplayExtrinsics
 from open_rigs.core import Vector3
-
-from open_rigs_reaction_time.rig import (
-    OpenRigsReactionTimeRig
-)
-
 from open_rigs.devices.harp import HarpHobgoblin
-from open_rigs.vision import Screen
+from open_rigs.vision import DisplayCalibration, DisplayExtrinsics, Screen
+
+from open_rigs_reaction_time.rig import OpenRigsReactionTimeRig
 
 rig = OpenRigsReactionTimeRig(
     root_path="../temp_data",

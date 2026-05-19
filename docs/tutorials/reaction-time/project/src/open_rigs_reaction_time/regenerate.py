@@ -2,8 +2,8 @@ from pathlib import Path
 from typing import Union
 
 import pydantic
-from open_rigs.core.experiment import ExperimentSession
 from aind_behavior_services.schema import BonsaiSgenSerializers, convert_pydantic_to_bonsai
+from open_rigs.core.experiment import ExperimentSession
 
 import open_rigs_reaction_time.rig
 import open_rigs_reaction_time.task
