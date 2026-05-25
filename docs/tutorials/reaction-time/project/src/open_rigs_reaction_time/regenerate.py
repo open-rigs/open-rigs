@@ -1,15 +1,16 @@
-import json
 from pathlib import Path
 from typing import Union
-
+import json
 import pydantic
-from open_rigs.core.experiment import ExperimentSession
+import os
 
+from open_rigs.core import ExperimentSession
 import open_rigs_reaction_time.rig
 import open_rigs_reaction_time.task
 
 SCHEMA_ROOT = Path("./src/DataSchemas/")
 SCHEMA_FILE = SCHEMA_ROOT / "open-rigs-reaction-time.json"
+
 
 def main():
     models = [
@@ -22,6 +23,7 @@ def main():
     SCHEMA_ROOT.mkdir(parents=True, exist_ok=True)
     SCHEMA_FILE.write_text(json.dumps(schema, indent=2))
     print(f"Schema written to {SCHEMA_FILE}")
+    os.system("dotnet bonsai.sgen src/DataSchemas/open_rigs_reaction_time.json --output src/Extensions --serializer json --serializer yaml")
 
 
 if __name__ == "__main__":
