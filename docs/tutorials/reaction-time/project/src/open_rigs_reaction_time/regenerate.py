@@ -9,7 +9,7 @@ import open_rigs_reaction_time.rig
 import open_rigs_reaction_time.task
 
 SCHEMA_ROOT = Path("./src/DataSchemas/")
-SCHEMA_FILE = SCHEMA_ROOT / "open-rigs-reaction-time.json"
+SCHEMA_FILE = SCHEMA_ROOT / "open_rigs_reaction_time.json"
 
 
 def main():
