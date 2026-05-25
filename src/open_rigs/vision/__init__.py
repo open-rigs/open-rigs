@@ -1,5 +1,5 @@
 from open_rigs.vision.vision import SyncQuad, RandomFlip
-from open_rigs.vision.displays import DisplayIntrinsics, DisplayExtrinsics, DisplayCalibration, Screen
+from open_rigs.vision.displays import DisplayIntrinsics, DisplayExtrinsics, DisplayCalibration, ViewportConfiguration, Screen
 
 __all__ = [
     "SyncQuad",
@@ -7,5 +7,6 @@ __all__ = [
     "DisplayIntrinsics",
     "DisplayExtrinsics",
     "DisplayCalibration",
+    "ViewportConfiguration",
     "Screen",
 ]
