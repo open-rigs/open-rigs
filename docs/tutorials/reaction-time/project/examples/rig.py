@@ -2,7 +2,7 @@ import os
 
 from open_rigs.core import Vector3
 from open_rigs.devices.harp import HarpHobgoblin
-from open_rigs.vision import DisplayCalibration, DisplayExtrinsics, DisplayIntrinsics, ViewportConfiguration, Screen
+from open_rigs.vision import DisplayCalibration, DisplayExtrinsics, DisplayIntrinsics, Screen, ViewportConfiguration
 
 from open_rigs_reaction_time.rig import OpenRigsReactionTimeRig
 
