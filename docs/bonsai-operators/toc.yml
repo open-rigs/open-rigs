@@ -1,0 +1,41 @@
+- name: OpenRigs.Devices
+  items:
+  - name: Arduino LED Driver
+    href: OpenRigs.Devices/arduino-led-driver.md
+  - name: Behavior Board
+    href: OpenRigs.Devices/behavior-board.md
+    items:
+    - name: PulseController
+      href: OpenRigs.Devices/behavior-board.md#pulsecontroller
+    - name: CameraTriggerController
+      href: OpenRigs.Devices/behavior-board.md#cameratriggercontroller
+    - name: RunningWheel
+      href: OpenRigs.Devices/behavior-board.md#runningwheel
+    - name: Timestamps
+      href: OpenRigs.Devices/behavior-board.md#timestamps
+  - name: Harp Lick Spout Stage
+    href: OpenRigs.Devices/harp-lick-spout-stage.md
+  - name: Harp Timestamp Generator Gen3
+    href: OpenRigs.Devices/harp-timestamp-generator-gen3.md
+  - name: Lick Spout Stage
+    href: OpenRigs.Devices/lick-spout-stage.md
+  - name: LicketySplit
+    href: OpenRigs.Devices/lickety-split.md
+  - name: Serial Device
+    href: OpenRigs.Devices/serial-device.md
+  - name: Triggered Spinnaker
+    href: OpenRigs.Devices/triggered-spinnaker.md
+- name: OpenRigs.Logging
+  items:
+  - name: Log Controller
+    href: OpenRigs.Logging/log-controller.md
+  - name: Log Data
+    href: OpenRigs.Logging/log-data.md
+  - name: Log Harp Device
+    href: OpenRigs.Logging/log-harp-device.md
+  - name: Log Video
+    href: OpenRigs.Logging/log-video.md
+- name: OpenRigs.Vision
+  items:
+  - name: Sync Quad
+    href: OpenRigs.Vision/sync-quad.md
