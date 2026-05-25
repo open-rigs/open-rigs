@@ -1,9 +1,10 @@
+import json
 from pathlib import Path
 from typing import Union
-import json
-import pydantic
 
+import pydantic
 from open_rigs.core.experiment import ExperimentSession
+
 import open_rigs_reaction_time.rig
 import open_rigs_reaction_time.task
 
