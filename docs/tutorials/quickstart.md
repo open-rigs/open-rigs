@@ -8,10 +8,10 @@ First, install the `copier` tool from the command line (should only need to be d
 uv tool install copier
 ```
 
-Next, run `copier` with the open-rigs [rig template](https://github.com/open-rigs/rig-template) in the directory where you want to create your new project:
+Next, run `copier` with the open-rigs [rig template](https://github.com/open-rigs/open-rigs) in the directory where you want to create your new project:
 
 ```
-copier copy --vcs-ref main https://github.com/open-rigs/rig-template.git ./my-new-project
+copier copy --vcs-ref main https://github.com/open-rigs/open-rigs.git ./my-new-project
 ```
 `copier` will prompt you for some basic template variables and then generate required files and directory structure.
 
