@@ -1,6 +1,6 @@
 ## New Project
 
-In order for open-rigs projects to have a somewhat standardised structure, a [copier](https://copier.readthedocs.io/en/stable/) template is [provided](https://github.com/open-rigs/rig-template) as part of the framework. 
+In order for open-rigs projects to have a somewhat standardised structure, a [copier](https://copier.readthedocs.io/en/stable/) template is [provided](https://github.com/open-rigs/open-rigs/tree/main/template) as part of the framework. 
 
 First, install the `copier` tool from the command line (should only need to be done once per machine):
 
