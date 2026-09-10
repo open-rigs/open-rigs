@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRigs.Tests;
 
 namespace OpenRigs.Logging.Tests
 {
@@ -12,7 +13,6 @@ namespace OpenRigs.Logging.Tests
         const string WorkflowFileName = "LogDataTest.bonsai";
         const string SubjectId = "TestSubject";
         const string SessionId = "001";
-        const int ExpectedSampleCount = 5;
 
         static readonly string[] ExpectedHeader = { "Seconds", "Value.X", "Value.Y", "Value.Z" };
 
@@ -47,14 +47,20 @@ namespace OpenRigs.Logging.Tests
             }
         }
 
-        [TestMethod]
-        public void LogData_TimestampedPoint3d_WritesOneSamplePerRow()
+        // The workflow defaults are LogName "Data" and Count 5, so at least one row must differ from
+        // both to prove the values are actually being applied rather than coincidentally matching.
+        [DataTestMethod]
+        [DataRow("Point3Data", 3)]
+        [DataRow("TestData", 5)]
+        public void LogData_TimestampedPoint3d_WritesRequestedSamplesToNamedLog(string logName, int count)
         {
             var result = BonsaiWorkflowRunner.Run(WorkflowFileName, new Dictionary<string, string>
             {
                 { "SubjectId", SubjectId },
                 { "SessionId", SessionId },
-                { "Path", logRoot }
+                { "Path", logRoot },
+                { "LogName", logName },
+                { "Count", count.ToString(CultureInfo.InvariantCulture) }
             });
 
             // The log file name embeds a timestamp, so search for it rather than reconstructing the path.
@@ -64,11 +70,17 @@ namespace OpenRigs.Logging.Tests
                 logFiles.Length,
                 $"Expected the workflow to write exactly one CSV log file under '{logRoot}'.{result.Describe()}");
 
+            var logFileName = Path.GetFileName(logFiles[0]);
+            Assert.IsTrue(
+                logFileName.StartsWith(logName, StringComparison.Ordinal),
+                $"Expected the log file name '{logFileName}' to be prefixed with the requested " +
+                $"LogName '{logName}'.{result.Describe()}");
+
             var lines = File.ReadAllLines(logFiles[0]);
             Assert.AreEqual(
-                ExpectedSampleCount + 1,
+                count + 1,
                 lines.Length,
-                $"Expected a single header row followed by {ExpectedSampleCount} samples in " +
+                $"Expected a single header row followed by the requested {count} samples in " +
                 $"'{logFiles[0]}'.{result.Describe()}");
 
             CollectionAssert.AreEqual(
@@ -76,7 +88,7 @@ namespace OpenRigs.Logging.Tests
                 lines[0].Split(','),
                 $"Unexpected header row in '{logFiles[0]}'.{result.Describe()}");
 
-            for (var sample = 0; sample < ExpectedSampleCount; sample++)
+            for (var sample = 0; sample < count; sample++)
             {
                 var line = lines[sample + 1];
                 var columns = line.Split(',');

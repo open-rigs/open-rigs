@@ -62,15 +62,22 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="harp:CreateTimestamped" />
       </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Count" />
+      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Take">
           <rx:Count>5</rx:Count>
         </Combinator>
       </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="LogName" />
+      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="OpenRigs.Logging:LogData.bonsai">
-        <LogName>TestData</LogName>
+        <ChunkSize>1</ChunkSize>
+        <ClosingDuration xsi:nil="true" />
+        <LogName>Data</LogName>
         <Selector>Seconds, Value.X, Value.Y, Value.Z</Selector>
-        <Extension>csv</Extension>
       </Expression>
       <Expression xsi:type="WorkflowOutput" />
     </Nodes>
@@ -87,9 +94,11 @@
       <Edge From="10" To="11" Label="Source1" />
       <Edge From="11" To="12" Label="Source1" />
       <Edge From="12" To="13" Label="Source1" />
-      <Edge From="13" To="14" Label="Source1" />
-      <Edge From="14" To="15" Label="Source1" />
-      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="13" To="15" Label="Source1" />
+      <Edge From="14" To="15" Label="Source2" />
+      <Edge From="15" To="17" Label="Source1" />
+      <Edge From="16" To="17" Label="Source2" />
+      <Edge From="17" To="18" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

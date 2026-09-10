@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Logging", "src\Ope
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Logging.Tests", "src\OpenRigs.Logging.Tests\OpenRigs.Logging.Tests.csproj", "{995E0FD9-592B-497D-9BB0-D01357EB72D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Tests", "src\OpenRigs.Tests\OpenRigs.Tests.csproj", "{7A1F2C64-8D3B-4E59-9A07-2B6C4F81D5E3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Video", "src\OpenRigs.Video\OpenRigs.Video.csproj", "{622C6B21-3B43-41C2-B44E-389022817334}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRigs.Vision", "src\OpenRigs.Vision\OpenRigs.Vision.csproj", "{ABC3E39D-3D71-4F2D-BBE9-2C76A93EE487}"
@@ -46,6 +48,10 @@ Global
 		{995E0FD9-592B-497D-9BB0-D01357EB72D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{995E0FD9-592B-497D-9BB0-D01357EB72D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{995E0FD9-592B-497D-9BB0-D01357EB72D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A1F2C64-8D3B-4E59-9A07-2B6C4F81D5E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A1F2C64-8D3B-4E59-9A07-2B6C4F81D5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1F2C64-8D3B-4E59-9A07-2B6C4F81D5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A1F2C64-8D3B-4E59-9A07-2B6C4F81D5E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{622C6B21-3B43-41C2-B44E-389022817334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{622C6B21-3B43-41C2-B44E-389022817334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{622C6B21-3B43-41C2-B44E-389022817334}.Release|Any CPU.ActiveCfg = Release|Any CPU

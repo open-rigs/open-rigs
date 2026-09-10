@@ -5,13 +5,13 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace OpenRigs.Logging.Tests
+namespace OpenRigs.Tests
 {
     /// <summary>
     /// Launches Bonsai workflows headlessly against the repository Bonsai environment,
     /// in the same way the "Bonsai" profile in launchSettings.json does.
     /// </summary>
-    static class BonsaiWorkflowRunner
+    public static class BonsaiWorkflowRunner
     {
         static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(120);
 
@@ -221,7 +221,7 @@ namespace OpenRigs.Logging.Tests
     /// <summary>
     /// The outcome of a headless Bonsai workflow run.
     /// </summary>
-    sealed class BonsaiWorkflowResult
+    public sealed class BonsaiWorkflowResult
     {
         public BonsaiWorkflowResult(int exitCode, string standardOutput, string standardError, string commandLine)
         {
