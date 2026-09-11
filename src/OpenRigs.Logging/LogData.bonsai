@@ -48,7 +48,7 @@
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="Name" />
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="C:\Users\Saleem Lab\source\repos\open-rigs\src\OpenRigs.Logging\FormatFileName.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="OpenRigs.Logging:FormatFileName.bonsai">
               <Name>Data</Name>
               <Extension>csv</Extension>
             </Expression>
