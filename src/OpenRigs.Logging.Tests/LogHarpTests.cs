@@ -54,62 +54,68 @@ namespace OpenRigs.Logging.Tests
             var result = RunWorkflow(LogName, count: 20);
             var logFiles = GetLogFiles(result);
 
+            // Every register of the device shares a single folder named after the device.
+            var deviceFolders = logFiles
+                .Select(Path.GetDirectoryName)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+            Assert.AreEqual(
+                1,
+                deviceFolders.Length,
+                $"Expected every register log to share one device folder, but found " +
+                $"{deviceFolders.Length}: {string.Join(", ", deviceFolders)}.{result.Describe()}");
+
+            var relativePath = deviceFolders[0].Substring(logRoot.Length).TrimStart(Path.DirectorySeparatorChar);
+            var segments = relativePath.Split(Path.DirectorySeparatorChar);
+            Assert.AreEqual(
+                3,
+                segments.Length,
+                $"Expected the device folder to sit two folders below the log root, but found " +
+                $"'{relativePath}'.{result.Describe()}");
+
+            Assert.AreEqual(
+                $"sub-{SubjectId}",
+                segments[0],
+                $"Expected the subject folder to be named sub-<subject>.{result.Describe()}");
+
+            // LogController lays out the session folder as ses-<session>_date-<datetime>.
+            var sessionFolder = segments[1];
+            var sessionMatch = Regex.Match(
+                sessionFolder,
+                $@"^ses-{Regex.Escape(SessionId)}_date-(\d{{4}}-\d{{2}}-\d{{2}}T\d{{2}}-\d{{2}}-\d{{2}})$");
+            Assert.IsTrue(
+                sessionMatch.Success,
+                $"Expected the session folder to match ses-{SessionId}_date-<datetime> but found " +
+                $"'{sessionFolder}'.{result.Describe()}");
+
+            Assert.IsTrue(
+                DateTime.TryParseExact(
+                    sessionMatch.Groups[1].Value,
+                    "yyyy-MM-ddTHH-mm-ss",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _),
+                $"Could not parse the session date from '{sessionFolder}'.{result.Describe()}");
+
+            Assert.AreEqual(
+                LogName,
+                segments[2],
+                $"Expected the device folder to be named after LogName.{result.Describe()}");
+
+            // Each register still gets its own file, distinguished by the register address.
             foreach (var logFile in logFiles)
             {
-                var relativePath = logFile.Substring(logRoot.Length).TrimStart(Path.DirectorySeparatorChar);
-                var segments = relativePath.Split(Path.DirectorySeparatorChar);
-                Assert.AreEqual(
-                    4,
-                    segments.Length,
-                    $"Expected the log to sit three folders deep below the log root, but found " +
-                    $"'{relativePath}'.{result.Describe()}");
-
-                Assert.AreEqual(
-                    $"sub-{SubjectId}",
-                    segments[0],
-                    $"Expected the subject folder to be named sub-<subject>.{result.Describe()}");
-
-                // LogController lays out the session folder as ses-<session>_date-<datetime>.
-                var sessionFolder = segments[1];
-                var sessionMatch = Regex.Match(
-                    sessionFolder,
-                    $@"^ses-{Regex.Escape(SessionId)}_date-(\d{{4}}-\d{{2}}-\d{{2}}T\d{{2}}-\d{{2}}-\d{{2}})$");
-                Assert.IsTrue(
-                    sessionMatch.Success,
-                    $"Expected the session folder to match ses-{SessionId}_date-<datetime> but found " +
-                    $"'{sessionFolder}'.{result.Describe()}");
-
-                Assert.IsTrue(
-                    DateTime.TryParseExact(
-                        sessionMatch.Groups[1].Value,
-                        "yyyy-MM-ddTHH-mm-ss",
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out _),
-                    $"Could not parse the session date from '{sessionFolder}'.{result.Describe()}");
-
-                // LogHarpDevice demultiplexes by register, giving each its own <LogName>_<address> folder.
-                var registerFolder = segments[2];
-                var registerMatch = Regex.Match(
-                    registerFolder,
-                    $@"^{Regex.Escape(LogName)}_(\d+)$");
-                Assert.IsTrue(
-                    registerMatch.Success,
-                    $"Expected the register folder to match {LogName}_<address> but found " +
-                    $"'{registerFolder}'.{result.Describe()}");
-
-                var address = int.Parse(registerMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                var address = GetRegisterAddress(logFile, LogName, result);
                 Assert.IsTrue(
                     BehaviorDeviceSimulator.Registers.Any(register => register.Address == address),
-                    $"Address {address} in '{registerFolder}' is not a register of the simulated " +
-                    $"device.{result.Describe()}");
-
-                StringAssert.Matches(
-                    segments[3],
-                    new Regex($@"^{Regex.Escape(registerFolder)}.*\.bin$"),
-                    $"Expected the data file to sit inside '{registerFolder}' and be prefixed with " +
-                    $"it.{result.Describe()}");
+                    $"Address {address} in '{Path.GetFileName(logFile)}' is not a register of the " +
+                    $"simulated device.{result.Describe()}");
             }
+
+            var addresses = logFiles.Select(logFile => GetRegisterAddress(logFile, LogName, result)).ToArray();
+            CollectionAssert.AllItemsAreUnique(
+                addresses,
+                $"Expected one log file per register address.{result.Describe()}");
         }
 
         [DataTestMethod]
@@ -122,10 +128,10 @@ namespace OpenRigs.Logging.Tests
             var result = RunWorkflow(logName, count);
             var logFiles = GetLogFiles(result);
 
-            // Each register is logged separately, so the requested Count is spread across the
+            // Each register is logged to its own file, so the requested Count is spread across the
             // per-register logs rather than landing in any single one.
             var samplesPerRegister = logFiles.ToDictionary(
-                logFile => Path.GetFileName(Path.GetDirectoryName(logFile)),
+                logFile => GetRegisterAddress(logFile, logName, result),
                 HarpBinaryLog.CountMessages);
             var totalSamples = samplesPerRegister.Values.Sum();
 
@@ -137,6 +143,19 @@ namespace OpenRigs.Logging.Tests
                 totalSamples,
                 $"Expected the samples across all register logs to add up to the requested Count. " +
                 $"Found {logFiles.Length} logs: {breakdown}.{result.Describe()}");
+        }
+
+        int GetRegisterAddress(string logFile, string logName, BonsaiWorkflowResult result)
+        {
+            // Log files are named <LogName>_<address>_<timestamp>, where the timestamp is appended
+            // by the writer rather than being part of the register name.
+            var fileName = Path.GetFileName(logFile);
+            var match = Regex.Match(fileName, $@"^{Regex.Escape(logName)}_(\d+)_");
+            Assert.IsTrue(
+                match.Success,
+                $"Expected the log file name '{fileName}' to match {logName}_<address>_<timestamp>." +
+                result.Describe());
+            return int.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
         }
 
         BonsaiWorkflowResult RunWorkflow(string logName, int count)
@@ -154,7 +173,7 @@ namespace OpenRigs.Logging.Tests
 
         string[] GetLogFiles(BonsaiWorkflowResult result)
         {
-            var logFiles = Directory.GetFiles(logRoot, "*.bin", SearchOption.AllDirectories);
+            var logFiles = Directory.GetFiles(logRoot, "*.csv", SearchOption.AllDirectories);
             Assert.AreNotEqual(
                 0,
                 logFiles.Length,
