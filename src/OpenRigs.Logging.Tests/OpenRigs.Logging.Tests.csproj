@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenRigs.HardwareSimulation\OpenRigs.HardwareSimulation.csproj" />
     <ProjectReference Include="..\OpenRigs.Logging\OpenRigs.Logging.csproj" />
     <ProjectReference Include="..\OpenRigs.Tests\OpenRigs.Tests.csproj" />
   </ItemGroup>

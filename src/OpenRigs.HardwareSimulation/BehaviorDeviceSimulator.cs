@@ -7,7 +7,7 @@ using System.Reflection;
 using Bonsai;
 using Bonsai.Harp;
 
-namespace OpenRigs.Tests
+namespace OpenRigs.HardwareSimulation
 {
     /// <summary>
     /// Simulates a Harp Behavior board, emitting a randomly selected register message on each tick
