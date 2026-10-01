@@ -3,21 +3,15 @@ from open_rigs.components.audio import (
     Speaker,
     AudioDevice,
     SpeakerArray,
+    SpeakerFilter,
 )
-from open_rigs.components.calibration import (
-    MeshMap,
-    SpeakerFilters,
-    CalibrationFiles,
-    ProjectionCalibration,
-)
+from open_rigs.components.calibration import ProjectionCalibration
 
 __all__ = [
     "SphericalPosition",
     "Speaker",
     "AudioDevice",
     "SpeakerArray",
-    "MeshMap",
-    "SpeakerFilters",
-    "CalibrationFiles",
+    "SpeakerFilter",
     "ProjectionCalibration",
 ]
