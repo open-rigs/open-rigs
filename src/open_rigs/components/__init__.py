@@ -5,9 +5,6 @@ from open_rigs.components.audio import (
     SpeakerArray,
 )
 from open_rigs.components.calibration import (
-    Calibration,
-    CalibrationPoint,
-    CalibrationCurve,
     MeshMap,
     SpeakerFilters,
     CalibrationFiles,
@@ -19,9 +16,6 @@ __all__ = [
     "Speaker",
     "AudioDevice",
     "SpeakerArray",
-    "Calibration",
-    "CalibrationPoint",
-    "CalibrationCurve",
     "MeshMap",
     "SpeakerFilters",
     "CalibrationFiles",

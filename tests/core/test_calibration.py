@@ -3,13 +3,8 @@ from datetime import datetime, timezone
 import pytest
 from pydantic import ValidationError
 
-from open_rigs.components.calibration import (
-    CalibrationCurve,
-    CalibrationFiles,
-    CalibrationPoint,
-    MeshMap,
-    SpeakerFilters,
-)
+from open_rigs.components.calibration import CalibrationFiles, MeshMap, SpeakerFilters
+from open_rigs.core.calibration import CalibrationCurve, CalibrationPoint
 from open_rigs.core import yaml as rig_yaml
 
 PROVENANCE = dict(
