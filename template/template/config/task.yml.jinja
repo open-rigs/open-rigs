@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=../src/DataSchemas/{{ python_folder_name }}.json
+# Task parameters for one protocol. Committed with the workflow; add one file per protocol and point
+# main.bonsai at it with its TaskFile property. The machine's own file, rig.yml under
+# <ConfigRoot>\<MACHINE-NAME>, says what hardware exists; this file says how the task uses it.
+taskParameters:
+  rngSeed: null            # null draws a random seed

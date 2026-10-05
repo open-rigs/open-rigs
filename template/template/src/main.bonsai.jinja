@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:p1="clr-namespace:OpenRigs.Core;assembly=OpenRigs.Core"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p2="clr-namespace:{{ python_class_prefix }};assembly=Extensions"
+                 xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Description>The starting point of a rig workflow. Reads this machine's rig.yml from ConfigRoot\MACHINE-NAME into the RigConfig subject, reads the task file named by TaskFile into the TaskConfig subject, opens a session folder under the rig's rootPath and snapshots both configurations into it. Devices and task logic subscribe to RigConfig and TaskConfig, one subscription per device. Run regenerate.py before opening this workflow, and deploy.ps1 to create the machine's rig.yml.</Description>
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="ConfigRoot" DisplayName="ConfigRoot" Description="Where every machine has its own configuration directory, named after the machine. A new project starts with its own config\rigs folder, which scripts\deploy.ps1 fills for this machine from config\rig-template.yml. Change it to the lab's shared root, C:\RigConfigs or a network share, once rigs share one." />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:ResolveRigConfigDirectory">
+          <p1:ConfigRoot>..\config\rigs</p1:ConfigRoot>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:AsyncSubject">
+        <Name>RigConfigDirectory</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>RigConfigDirectory</Name>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="OpenRigs.Core:ReadRigConfig.bonsai">
+        <FileName>rig.yml</FileName>
+      </Expression>
+      <Expression xsi:type="p2:DeserializeFromYaml">
+        <p2:Type xsi:type="TypeMapping" TypeArguments="p2:{{ python_class_prefix }}Rig" />
+      </Expression>
+      <Expression xsi:type="rx:AsyncSubject">
+        <Name>RigConfig</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Path" DisplayName="TaskFile" Description="The task file for this run, relative to the workflow. One committed file per protocol under config." />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:ReadAllText">
+          <io:Path>..\config\task.yml</io:Path>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="p2:DeserializeFromYaml">
+        <p2:Type xsi:type="TypeMapping" TypeArguments="p2:{{ python_class_prefix }}TaskLogic" />
+      </Expression>
+      <Expression xsi:type="rx:AsyncSubject">
+        <Name>TaskConfig</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="SubjectId" Description="The subject this session is for. Names the sub- folder." />
+        <Property Name="SessionId" Description="The session identifier. Names the ses- folder together with the date." />
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>RigConfig</Name>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>RootPath</Selector>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Path" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="OpenRigs.Logging:LogController.bonsai">
+        <SubjectId>Subject</SubjectId>
+        <SessionId>001</SessionId>
+        <Path>C:\Data</Path>
+      </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>LogSchemas</Name>
+        <Description>Snapshots of the rig configuration and the task configuration into the session folder, as RigSchema and TaskSchema. With the data, a session folder then says exactly which hardware and which protocol produced it.</Description>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>RigConfig</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SerializeToJson">
+                <p2:Formatting>Indented</p2:Formatting>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="OpenRigs.Logging:LogDataSchema.bonsai">
+              <Name>RigSchema</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TaskConfig</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SerializeToJson">
+                <p2:Formatting>Indented</p2:Formatting>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="OpenRigs.Logging:LogDataSchema.bonsai">
+              <Name>TaskSchema</Name>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="11" To="15" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="14" Label="Source1" />
+      <Edge From="14" To="15" Label="Source2" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>

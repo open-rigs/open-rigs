@@ -1,19 +1,18 @@
-# Import core types
-from typing import Literal
-from pydantic import Field
+"""The task: what a protocol asks of the rig. The rig model says what hardware exists, this model says how the task runs it."""
 
-from swc.aeon.io import reader
-from swc.aeon.schema import BaseSchema, data_reader
+from typing import Literal
+
+from pydantic import Field
+from open_rigs.core.task import Task, TaskParameters
 
 from {{ python_folder_name }} import __semver__
 
-# TODO - should inherit from some TaskParameters base class rather than BaseSchema
-class {{ python_class_prefix }}TaskParameters(BaseSchema):
-    ...
+
+class {{ python_class_prefix }}TaskParameters(TaskParameters):
+    """Parameters of the task logic. Add the values a protocol decides: trial structure, stimuli, reward sizes, which devices it uses."""
 
 
-class {{ python_class_prefix }}TaskLogic(BaseSchema):
+class {{ python_class_prefix }}TaskLogic(Task):
     version: Literal[__semver__] = __semver__
     name: Literal["{{ python_class_prefix }}"] = Field(default="{{ python_class_prefix }}", description="Name of the task logic", frozen=True)
     task_parameters: {{ python_class_prefix }}TaskParameters = Field(description="Parameters of the task logic")
-    ...

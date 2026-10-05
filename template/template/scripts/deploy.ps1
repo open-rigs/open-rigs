@@ -1,7 +1,10 @@
 param(
     # Root of the per-machine rig configuration directories. The rig workflow reads
-    # <ConfigRoot>\<MACHINE-NAME>\rig.yml and calibration artefacts beside it.
-    [string]$ConfigRoot = "C:\RigConfigs"
+    # <ConfigRoot>\<MACHINE-NAME>\rig.yml and calibration artefacts beside it. The template
+    # default is the repository's own config\rigs folder (ignored by git), which matches the
+    # ConfigRoot property of src\main.bonsai. Once rigs share a root, such as C:\RigConfigs or a
+    # network share, pass it here and set the same value on the workflow.
+    [string]$ConfigRoot = ".\config\rigs"
 )
 
 $scriptPath = $MyInvocation.MyCommand.Path

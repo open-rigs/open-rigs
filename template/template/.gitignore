@@ -84,3 +84,6 @@ ipython_config.py
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
 # .python-version
+# Per-machine rig configuration that scripts/deploy.ps1 creates under the template default root.
+# Per-rig values are never committed; config/rig-template.yml is the example that ships.
+config/rigs/
