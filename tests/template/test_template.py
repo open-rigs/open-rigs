@@ -29,10 +29,10 @@ pytestmark = [
     ),
 ]
 
-TEMPLATE_ROOT = Path(__file__).parents[2] / "template"
+TEMPLATE_ROOT = Path(__file__).parents[2]  # copier.yml sits at the repository root; its _subdirectory names the body
 EXAMPLES = sorted(
     path.name.removesuffix(".jinja")
-    for path in (TEMPLATE_ROOT / "template" / "examples").glob("*.py.jinja")
+    for path in (TEMPLATE_ROOT / "template" / "template" / "examples").glob("*.py.jinja")
 )
 
 ANSWERS = {
@@ -80,7 +80,9 @@ def assert_success(result: subprocess.CompletedProcess[str]) -> None:
 def project(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """Generates a new project from the template."""
     destination = tmp_path_factory.mktemp("template") / ANSWERS["project_name"]
-    copier.run_copy(str(TEMPLATE_ROOT), destination, data=ANSWERS, defaults=True, quiet=True)
+    # The repository root is a git checkout: without vcs_ref="HEAD" copier would render the latest
+    # tag instead of the working tree.
+    copier.run_copy(str(TEMPLATE_ROOT), destination, data=ANSWERS, defaults=True, quiet=True, vcs_ref="HEAD")
     return destination
 
 
