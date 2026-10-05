@@ -18,7 +18,15 @@ from open_rigs.core.base import (
     SoftwareEvent,
 )
 from open_rigs.core.artefacts import ArtefactPath, rig_artefacts
-from open_rigs.core.calibration import Calibration, CalibrationPoint, CalibrationCurve
+from open_rigs.core.calibration import (
+    Calibration,
+    CalibrationSchema,
+    CalibrationModel,
+    CalibrationPoint,
+    CalibrationCurve,
+    DispenseSample,
+    DispenseProcedure,
+)
 from open_rigs.core.experiment import ExperimentSession
 from open_rigs.core.task import Task, TaskParameters
 
@@ -43,8 +51,12 @@ __all__ = [
     "ArtefactPath",
     "rig_artefacts",
     "Calibration",
+    "CalibrationSchema",
+    "CalibrationModel",
     "CalibrationPoint",
     "CalibrationCurve",
+    "DispenseSample",
+    "DispenseProcedure",
     "ExperimentSession",
     "Task",
     "TaskParameters",
