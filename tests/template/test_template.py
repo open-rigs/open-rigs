@@ -11,6 +11,7 @@ Run only these tests with `pytest -m template`, or skip them with `pytest -m "no
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -84,6 +85,15 @@ def project(tmp_path_factory: pytest.TempPathFactory) -> Path:
     # The repository root is a git checkout: without vcs_ref="HEAD" copier would render the latest
     # tag instead of the working tree.
     copier.run_copy(str(TEMPLATE_ROOT), destination, data=ANSWERS, defaults=True, quiet=True, vcs_ref="HEAD")
+
+    # The generated project pins open-rigs to the main branch on GitHub. The template is tested
+    # against the checkout it came from, so the dependency points at this repository instead.
+    pyproject = destination / "pyproject.toml"
+    text = pyproject.read_text(encoding="utf-8")
+    source = f'open-rigs = {{ path = "{TEMPLATE_ROOT.as_posix()}", editable = true }}'
+    text, count = re.subn(r'open-rigs\s*=\s*\{git\s*=\s*"[^"]+",\s*branch\s*=\s*"[^"]+"\}', source, text)
+    assert count == 1, "the generated pyproject does not pin open-rigs to a git branch"
+    pyproject.write_text(text, encoding="utf-8")
     return destination
 
 
