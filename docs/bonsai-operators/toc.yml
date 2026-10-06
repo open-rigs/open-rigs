@@ -2,6 +2,8 @@
   items:
   - name: Rig Configuration
     href: OpenRigs.Core/rig-config.md
+  - name: Calibration
+    href: OpenRigs.Core/calibration.md
 - name: OpenRigs.Devices
   items:
   - name: Arduino LED Driver
@@ -35,6 +37,8 @@
     href: OpenRigs.Logging/log-controller.md
   - name: Log Data
     href: OpenRigs.Logging/log-data.md
+  - name: Log Data Schema
+    href: OpenRigs.Logging/log-data-schema.md
   - name: Log Harp Device
     href: OpenRigs.Logging/log-harp-device.md
   - name: Log Video

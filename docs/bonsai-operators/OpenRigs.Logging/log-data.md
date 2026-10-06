@@ -10,15 +10,16 @@
 ![LogData](~/assets/workflows/logging/LogData.svg){data-bonsai="~/src/OpenRigs.Logging/LogData.bonsai"}
 :::
 
-The workflow takes a data stream as its input, constructs the output path from `PathPrefix` + `LogName` + `Extension`, and writes rows into a `.csv` file. The `Selector` property controls which fields of the incoming type are written (defaults to `Seconds`, i.e. the Harp timestamp).
+The workflow takes a data stream as its input, splits it into hourly chunks, and writes each chunk to its own `.csv` file at `<PathPrefix>\<LogName>\<LogName>_<DateTime>.csv`. The `Selector` property controls which fields of the incoming type are written (defaults to `Seconds`, i.e. the Harp timestamp).
 
 ### Externalized properties
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| `LogName` | - | Stem added after the path prefix (e.g. `lick_spout`) |
-| `Extension` | `.csv` | File extension including the leading dot |
+| `LogName` | `Data` | The name of the log. It names the subfolder and prefixes each file |
 | `Selector` | `Seconds` | Comma-separated list of member names to write as columns |
+| `ChunkSize` | `1` | Hours per file. The stream is split into files of this length |
+| `ClosingDuration` | | How long a chunk's writer stays open after the next chunk starts, for late values |
 
 ---
 

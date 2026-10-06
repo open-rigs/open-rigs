@@ -18,7 +18,7 @@ The Behavior Board (`who_am_i = 1216`) is a Harp board commonly used as an I/O h
 Sub-modules:
 
 - `PulseController`: `output_pulse_enable` (the `DO1`/`DO2`/`DO3` lines enabled) and `outputs`, one entry per line saying what drives its pulse width: a `FixedPulse` with `pulse_width_ms` set in the rig configuration, or a `CalibratedPulse` naming the calibration curve that converts a requested quantity, such as a reward volume, to a width at run time. All three lines are listed; an unused line is a `FixedPulse` of width 0.
-- `CameraTriggerController`: `trigger0_frequency` and `trigger1_frequency` (Hz) for `CameraOutput0` and `CameraOutput1`.
+- `CameraTriggerController`: `trigger0_frequency` and `trigger1_frequency` (Hz) for `CameraOutput0` and `CameraOutput1`, with `trigger0_enabled` (default on) and `trigger1_enabled` (default off). A disabled trigger is never written, started or stopped, which leaves its pin, DO0 or DO1, free for a `PulseController` output.
 - `RunningWheel`: `counts_per_rev` and `wheel_diameter_mm`.
 
 ### Configuration example
