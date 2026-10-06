@@ -8,3 +8,5 @@
   href: calibration.md
 - name: Streaming
   href: streaming.md
+- name: Data Logging Specification
+  href: logging-spec.md
