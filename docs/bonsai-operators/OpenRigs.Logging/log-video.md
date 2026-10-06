@@ -21,7 +21,7 @@ File paths are built from the `PathPrefix` subject (published by [LogController]
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| `LogName` | - | Stem added after the path prefix (e.g. `_camera0`) |
+| `LogName` | - | Stem added after the path prefix (e.g. `camera0`) |
 | `FrameRate` | `50` | Nominal frame rate written into the AVI container header |
 
 ### Metadata columns
@@ -40,7 +40,7 @@ The CSV file contains one row per frame with these columns:
 
 ## Usage
 
-Connect a camera stream (i.e. from [Triggered Spinnaker](../OpenRigs.Devices/triggered-spinnaker.md)) to `LogVideo`:
+Connect a camera stream (i.e from [Triggered Spinnaker](../OpenRigs.Devices/triggered-spinnaker.md)) to `LogVideo`:
 
 
 One `LogVideo` instance is needed per camera. The `FrameRate` parameter controls the AVI container header only; the actual frame rate is determined by the camera trigger.

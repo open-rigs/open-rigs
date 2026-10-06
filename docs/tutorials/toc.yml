@@ -8,5 +8,3 @@
   href: building-deploying.md
 - name: Writing an Experiment Under open-rigs
   href: reaction-time/
-- name: Adding a Hardware Module
-  href: hardware-modules.md

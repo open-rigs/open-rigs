@@ -19,6 +19,7 @@ regenerate-calibration = "open_rigs._generators.calibration:main"
 
 [dependency-groups]
 dev = [
+  "copier>=9.18.2",
   "pandas-stubs",
   "pre-commit",
   "pyright==1.1.409",
@@ -61,5 +62,8 @@ exclude = [".venv/*", "docs/tutorials/reaction-time/project/*"]
 pythonpath = ["src"]
 addopts = [
   "--cov=src/open_rigs",    # Enable pytest-cov for the open_rigs package
+]
+markers = [
+  "template: end-to-end tests of the copier project template (slow, needs network, Windows, uv and dotnet)",
 ]
 

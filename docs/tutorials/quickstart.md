@@ -1,6 +1,6 @@
 ## New Project
 
-In order for open-rigs projects to have a somewhat standardised structure, a [copier](https://copier.readthedocs.io/en/stable/) template is [provided](https://github.com/open-rigs/rig-template) as part of the framework. 
+In order for open-rigs projects to have a somewhat standardised structure, a [copier](https://copier.readthedocs.io/en/stable/) template is [provided](https://github.com/open-rigs/open-rigs/tree/main/template) as part of the framework. 
 
 First, install the `copier` tool from the command line (should only need to be done once per machine):
 
@@ -8,10 +8,10 @@ First, install the `copier` tool from the command line (should only need to be d
 uv tool install copier
 ```
 
-Next, run `copier` with the open-rigs [rig template](https://github.com/open-rigs/rig-template) in the directory where you want to create your new project:
+Next, run `copier` with the open-rigs [rig template](https://github.com/open-rigs/open-rigs) in the directory where you want to create your new project:
 
 ```
-copier copy --vcs-ref main https://github.com/open-rigs/rig-template.git ./my-new-project
+copier copy --vcs-ref main https://github.com/open-rigs/open-rigs.git ./my-new-project
 ```
 `copier` will prompt you for some basic template variables and then generate required files and directory structure.
 
@@ -28,16 +28,16 @@ Schemas are `pydantic` models of the parameters that control an experiment. They
 To define a rig that contains a single Arduino device that writes data over serial, in `rig.py`:
 
 ```
-from typing import Literal
+from typing import Literal, Dict
 from pydantic import Field
 
-from open_rigs.rigs.base import BaseSchema
-from open_rigs.rigs.device import SerialDevice
+from open_rigs.core.rig import Rig
+from open_rigs.devices import SerialDevice
 
 from <your_project_name> import __semver__
 
 
-class <YourProjectName>Rig(BaseSchema):
+class <YourProjectName>Rig(Rig):
     version: Literal[__semver__] = __semver__
     arduino: SerialDevice = Field(description="Arduino with serial write data")
 ```
@@ -138,7 +138,7 @@ from open_rigs_implementation_example.rig import (
     <YourProjectName>ExampleRig
 )
 
-from open_rigs.rigs.device import SerialDevice
+from open_rigs.devices import SerialDevice
 
 rig = <YourProjectName>ExampleRig(
     arduino=SerialDevice(port_name="COM4")

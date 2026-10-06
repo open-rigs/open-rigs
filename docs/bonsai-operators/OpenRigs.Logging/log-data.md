@@ -10,13 +10,13 @@
 ![LogData](~/assets/workflows/logging/LogData.svg){data-bonsai="~/src/OpenRigs.Logging/LogData.bonsai"}
 :::
 
-The workflow takes a data stream as its `Source1` input, constructs the output path from `PathPrefix` + `LogName` + `Extension`, and writes rows in append mode. The `Selector` property controls which fields of the incoming type are written (defaults to `Seconds`, i.e. the Harp timestamp).
+The workflow takes a data stream as its input, constructs the output path from `PathPrefix` + `LogName` + `Extension`, and writes rows into a `.csv` file. The `Selector` property controls which fields of the incoming type are written (defaults to `Seconds`, i.e. the Harp timestamp).
 
 ### Externalized properties
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| `LogName` | - | Stem added after the path prefix (e.g. `_lick_spout`) |
+| `LogName` | - | Stem added after the path prefix (e.g. `lick_spout`) |
 | `Extension` | `.csv` | File extension including the leading dot |
 | `Selector` | `Seconds` | Comma-separated list of member names to write as columns |
 

@@ -7,18 +7,17 @@ name = "{{ python_package_name }}"
 description = "A library that defines a open-rigs data schema for the {{ project_name }} experiment."
 authors = [ {name = "{{ author_name }}", email = "{{author_email}}"}]
 license = "MIT"
-requires-python = ">=3.11, <3.12"
+requires-python = ">=3.11"
 classifiers = [
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3",
     "Operating System :: Microsoft :: Windows",
 ]
 version = "0.0.0-rc1"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-  "swc-aeon>=0.2.0",
   "open-rigs",
-  "pydantic-settings"
+  "pydantic-settings",
 ]
 
 # [project.urls]
@@ -28,7 +27,7 @@ dependencies = [
 # Changelog = "https://github.com/OpenRigs/{{ dotnet_full_name }}/releases"
 [project.scripts]
 {{ project_name }} = "{{ python_folder_name }}.cli:main"
-regenerate = "{{ python_folder_name }}.regenerate:main"
+regenerate-schemas = "{{ python_folder_name }}.regenerate:main"
 
 [tool.ruff]
 line-length = 120
