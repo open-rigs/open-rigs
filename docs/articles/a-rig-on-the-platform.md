@@ -6,6 +6,25 @@ A rig built on open-rigs does two things with the platform before any task logic
 
 **What is where.** Every machine has one folder under a configurable root, named after the machine: `<ConfigRoot>\<MACHINE-NAME>\rig.yml`, with a `calibration\` folder beside it. A new project starts with the root inside its own repository (`config\rigs`, filled by `deploy.ps1`) and moves it to a shared root, `C:\RigConfigs` or a network share, once rigs share one. The rig file describes the hardware that is physically there: ports, serial numbers, geometry, which output lines exist and how each is driven. It is deployed with the machine and never committed. [Rig Configuration](../bonsai-operators/OpenRigs.Core/rig-config.md) has the layout and the three operators.
 
+```mermaid
+flowchart LR
+    subgraph Root["ConfigRoot: C:/RigConfigs or a network share"]
+        D1["GREEN-DOME-2/<br/>rig.yml, calibration/"]
+        D2["BLUE-OPTO-1/<br/>rig.yml, calibration/"]
+        D3["SPROCKET/<br/>rig.yml, calibration/"]
+    end
+    M1["GREEN-DOME-2<br/>main.bonsai"] -- "ResolveRigConfigDirectory<br/>by machine name" --> D1
+    M2["BLUE-OPTO-1<br/>main.bonsai" ] -- "ResolveRigConfigDirectory" --> D2
+    D1 -- "ReadRigConfig<br/>DeserializeFromYaml" --> RC[("RigConfig")]
+    RC --> Dev["Device includes<br/>one SubscribeSubject each"]
+    T["config/task.yml<br/>committed with the workflow"] -- "DeserializeFromYaml" --> TC[("TaskConfig")]
+    TC --> Task["Task logic"]
+    RC --> Log["Logging<br/>RigSchema.json, TaskSchema.json<br/>in the session folder"]
+    TC --> Log
+```
+
+Each machine resolves its own folder by name; the same workflow runs on every machine without a change. The rig file is deployed, the task file is committed, and both are snapshotted into every session.
+
 **The task file is the other half.** It is committed in the experiment repository under `config\`, one file per protocol, and says how this protocol uses the rig: reward size, whether video is recorded, at what frame rate. A rig can run several protocols without a single change under `C:\RigConfigs`. [Experiment Schemas](../tutorials/reaction-time/experiment-schemas.md) explains the session, rig and task split that this follows.
 
 **In the workflow**, three lines at the top and nothing typed in by hand:
@@ -41,14 +60,3 @@ DO1: { discriminatorType: CalibratedPulse, artefact: calibration/valve-DO1.json 
 **At startup the rig reads it through the same directory.** `ResolveRigFile` turns the relative path into an absolute one, `DeserializeFromJson` gives the `CalibrationCurve`, `FitCalibrationCurve` fits it with the model named in `rig.yml`, and `LookupCalibration` turns each requested volume into a width, clamped to the calibrated range. The rig warns when the artefact was measured on another machine or is older than the threshold in its configuration. The artefact in use is snapshotted into the session folder like the rig and task configurations.
 
 **What to look for.** During a run: the request and reading subjects ticking through priming, baseline and the samples, the points filling a graph, the fit report, the path written. Afterwards: the artefact appearing in `calibration\`, and a rig workflow turning 4 µl into a width on one line and using the fixed width on another. [Calibration](calibration.md) has the full article.
-
-## Beyond startup: watching the rig from another machine
-
-Streaming is not part of the startup sequence and nothing about it comes from the configuration files. It is a set of generic operators a rig wires in where it has something worth watching: `StreamController` for the rig's one publisher socket, `PackDataMessage` and `PackVideoMessage` on the rig, `ReceiveStream` with `UnpackDataMessage` or `UnpackVideoMessage` on the viewer. The publisher drops rather than blocks, which makes it right for monitoring and remote displays and wrong for logging. The session key in every message header matches the session folder above. [Streaming](../bonsai-operators/OpenRigs.Streaming/streaming.md) has the quick start, the operators and the wire contract.
-
-## Where this stands, 6 October 2026
-
-- Rig configuration by machine name: in use on three experiment repositories.
-- Calibration: built and verified without hardware. The first run on a rig is the next step, then projector gamma on the same shape.
-- Template: a new project's `main.bonsai` does step 1 out of the box, with a committed `config\task.yml` starter. See [Project Structure](project-structure.md).
-- Streaming: merged. The single-socket layout is in review.

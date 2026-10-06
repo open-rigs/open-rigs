@@ -4,6 +4,23 @@ A rig built on open-rigs can publish what it is doing while it runs: values, eve
 
 Streaming is for monitoring, and nothing else. A heavy display can run on a different machine from acquisition, a rig can be watched from down the corridor, a lab can write a dashboard in Python. The package is built so that none of this can slow the rig down: when a viewer cannot keep up, messages are dropped at the publisher rather than queued without bound. That is the right trade for a live view and the wrong one for a record, which is why the data of a session is written by the [logging operators](../bonsai-operators/OpenRigs.Logging/log-controller.md) on the acquisition machine, and the stream is a window onto it.
 
+```mermaid
+flowchart LR
+    subgraph RigA["Rig A, acquisition machine"]
+        A1["PackDataMessage<br/>data/lick"] --> AS(("StreamController<br/>one socket, port 5556"))
+        A2["PackVideoMessage<br/>video/face"] --> AS
+    end
+    subgraph RigB["Rig B"]
+        B1["PackDataMessage<br/>data/wheel"] --> BS(("StreamController"))
+    end
+    AS -- "data/*, JSON" --> V1["Lab PC: Bonsai viewer<br/>ReceiveStream, UnpackDataMessage"]
+    AS -- "video, JPEG" --> V2["Video monitor<br/>ReceiveStream, UnpackVideoMessage"]
+    BS -- "data/*" --> V1
+    AS -- "data/*" --> V3["Python dashboard<br/>pyzmq, json"]
+```
+
+One socket per rig, any number of viewers, and one viewer can watch several rigs. The publisher drops when a viewer falls behind, so the rig is never held up, and the data of the session is still written by the loggers on the rig.
+
 ## 1. Give the rig a socket
 
 Start a new workflow and add a `StreamController`. Set `RigId` to `MyRig` and leave `SubjectId` and `SessionId` as they are for now. This one node opens the rig's publisher socket, bound to port 5556 on every network interface, and declares the `OutgoingMessage` subject that everything to be streamed will go through. Nothing else needs a wire to it.

@@ -10,6 +10,23 @@ A rig turns a quantity the task asks for, such as a reward volume, into somethin
 - **Settings types** `DispenseProcedure` and `SerialBalance`, committed by the experiment repository as one `DispenseCalibration` YAML.
 - **A serial balance include**, [`OpenRigs.Devices:SerialBalance.bonsai`](../bonsai-operators/OpenRigs.Core/calibration.md#serial-balance).
 
+```mermaid
+flowchart LR
+    subgraph Measure["Once per machine: CalibrateValve.bonsai"]
+        S["config/valve-calibration.yml<br/>samples, repeats, balance protocol"] --> P["DispenseCalibration include<br/>prime, baseline, burst and weigh per sample"]
+        P -- "(channel, size) pulse requests" --> Board["Behavior board<br/>TriggerCalibratedPulse"]
+        Bal["Serial balance<br/>WeightMeasurement"] --> P
+        P --> B["BuildCalibrationCurve<br/>monotone check, provenance"] --> W["WriteCalibrationArtefact"]
+    end
+    W --> A["ConfigRoot/MACHINE/calibration/valve-DO1.json<br/>points with units, who, when, which machine<br/>dated copy in history/"]
+    subgraph Run["Every session: main.bonsai"]
+        Y["rig.yml<br/>DO1: CalibratedPulse, artefact path"] --> RF["ResolveRigFile<br/>DeserializeFromJson"]
+        RF --> F["FitCalibrationCurve<br/>model named in rig.yml"] --> L["LookupCalibration, Inverse<br/>2 µl gives 38 ms, clamped to the measured range"] --> Pulse["TriggerCalibratedPulse"]
+        RF --> Snap["LogDataSchema<br/>artefact snapshot in the session folder"]
+    end
+    A --> RF
+```
+
 ## Where artefacts live
 
 Artefacts belong to the machine they were measured on. They sit under the machine's rig configuration directory, next to its `rig.yml`:
