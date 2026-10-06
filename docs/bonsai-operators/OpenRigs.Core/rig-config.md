@@ -18,7 +18,7 @@ One directory per machine under a configurable root:
       <artefact>.json
 ```
 
-`<MACHINE-NAME>` is the Windows computer name (`Environment.MachineName`). The root defaults to `C:\RigConfigs` and can be a local folder or a network share. Paths inside `rig.yml` that point at calibration artefacts are relative to the machine directory. This allows the same YAML to work whichever root a deployment uses.
+`<MACHINE-NAME>` is the Windows computer name (`Environment.MachineName`). The operator's root defaults to `C:\RigConfigs` and can be a local folder or a network share. A relative root is resolved against the workflow's directory: a project from the template starts with `..\config\rigs`, its own folder, and switches to a shared root once rigs share one. Paths inside `rig.yml` that point at calibration artefacts are relative to the machine directory. This allows the same YAML to work whichever root a deployment uses.
 
 If the machine directory does not exist, the workflow fails at startup with an error naming the machine and the full path it expected. That is deliberate: a rig that refuses to start is better than a rig silently running with the wrong or a missing configuration.
 
