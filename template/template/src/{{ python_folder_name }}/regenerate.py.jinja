@@ -1,29 +1,74 @@
+"""Regenerate everything derived from the pydantic models: the JSON schema, the C# classes, the rig template.
+
+Run `uv run regenerate` after any change to rig.py or task.py. The three steps run in order and stop at
+the first failure. Files edited by hand are not touched: the task files under config/ and the machine's
+own rig.yml.
+"""
+
+import json
+import subprocess
+import sys
 from pathlib import Path
 from typing import Union
-import json
-import pydantic
-import os
 
+import pydantic
 from open_rigs.core import ExperimentSession
+
 import {{ python_folder_name }}.rig
 import {{ python_folder_name }}.task
 
-SCHEMA_ROOT = Path("./src/DataSchemas/")
-SCHEMA_FILE = SCHEMA_ROOT / "{{ python_folder_name }}.json"
+ROOT = Path(__file__).resolve().parents[2]
+SCHEMA_FILE = ROOT / "src" / "DataSchemas" / "{{ python_folder_name }}.json"
+EXTENSIONS_ROOT = ROOT / "src" / "Extensions"
+# Scripts under experiment/ that write a generated settings file. generate_task.py and
+# generate_session.py are not here: their outputs are edited by hand or written per run.
+GENERATORS = [ROOT / "experiment" / "generate_rig.py"]
 
 
-def main():
+def generate_schema() -> None:
+    """Write the JSON schema of the rig, task and session models to src/DataSchemas."""
     models = [
         {{ python_folder_name }}.task.{{ python_class_prefix }}TaskLogic,
         {{ python_folder_name }}.rig.{{ python_class_prefix }}Rig,
-        ExperimentSession
+        ExperimentSession,
     ]
     model = pydantic.RootModel[Union[tuple(models)]]
     schema = model.model_json_schema(by_alias=True, mode="serialization", union_format="primitive_type_array")
-    SCHEMA_ROOT.mkdir(parents=True, exist_ok=True)
+    SCHEMA_FILE.parent.mkdir(parents=True, exist_ok=True)
     SCHEMA_FILE.write_text(json.dumps(schema, indent=2))
     print(f"Schema written to {SCHEMA_FILE}")
-    os.system("dotnet bonsai.sgen src/DataSchemas/{{ python_folder_name }}.json --output src/Extensions --serializer json --serializer yaml")
+
+
+def generate_csharp() -> None:
+    """Run Bonsai.Sgen on the schema. The C# namespace follows the schema file name."""
+    EXTENSIONS_ROOT.mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        [
+            "dotnet",
+            "bonsai.sgen",
+            str(SCHEMA_FILE),
+            "--output",
+            str(EXTENSIONS_ROOT),
+            "--serializer",
+            "json",
+            "--serializer",
+            "yaml",
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+
+
+def generate_settings() -> None:
+    """Run every generation script that writes a settings file derived from the models."""
+    for script in GENERATORS:
+        subprocess.run([sys.executable, str(script)], cwd=ROOT, check=True)
+
+
+def main() -> None:
+    generate_schema()
+    generate_csharp()
+    generate_settings()
 
 
 if __name__ == "__main__":

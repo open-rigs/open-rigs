@@ -1,0 +1,37 @@
+"""Write a task file with the model's default values, as the start of a new protocol.
+
+Task files under config/ are committed and edited by hand. This script never overwrites one;
+`uv run regenerate` does not call it. Give it the path of the new protocol's file, for example
+`uv run python experiment/generate_task.py config/task-training.yml`, edit the values, then point
+main.bonsai at the file with its TaskFile property.
+"""
+
+import sys
+from pathlib import Path
+
+from open_rigs.core import yaml
+
+from {{ python_folder_name }}.task import (
+    {{ python_class_prefix }}TaskLogic,
+    {{ python_class_prefix }}TaskParameters,
+)
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_PATH = ROOT / "config" / "task.yml"
+SCHEMA_PATH = "../src/DataSchemas/{{ python_folder_name }}.json#/$defs/{{ python_class_prefix }}TaskLogic"
+
+task_logic = {{ python_class_prefix }}TaskLogic(
+    task_parameters={{ python_class_prefix }}TaskParameters(),
+)
+
+
+def main(path: Path = DEFAULT_PATH) -> None:
+    if path.exists():
+        raise SystemExit(f"{path} exists and task files are edited by hand. Give a new path for a new protocol.")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    yaml.save(task_logic, path, schema_path=SCHEMA_PATH)
+    print(f"Task file written to {path}")
+
+
+if __name__ == "__main__":
+    main(Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PATH)

@@ -7,9 +7,16 @@ param(
     [string]$ConfigRoot = ".\config\rigs"
 )
 
+$ErrorActionPreference = "Stop"
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDirectory = Split-Path -Parent $scriptPath
 Set-Location (Split-Path -Parent $scriptDirectory)
+
+# Set-Location moves PowerShell but not the .NET file APIs used below. Make the root absolute here.
+if (-not [IO.Path]::IsPathRooted($ConfigRoot)) {
+    $ConfigRoot = Join-Path (Get-Location).Path $ConfigRoot
+}
+$ConfigRoot = [IO.Path]::GetFullPath($ConfigRoot)
 
 Write-Output "Initializing and updating submodules..."
 &git submodule update --init --recursive
@@ -27,9 +34,6 @@ if (Test-Path -Path ./.venv) {
 Write-Output "Synchronizing environment..."
 &uv sync
 
-Write-Output "Regenerating JSON schema from pydantic models..."
-&uv run regenerate-schemas
-
 if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
     throw "The 'dotnet' command was not found. Install the .NET SDK: https://dotnet.microsoft.com/download"
 }
@@ -37,18 +41,11 @@ if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
 Write-Output "Restoring dotnet tools..."
 &dotnet tool restore
 
-# Derive C# namespace from schema filename (snake_case -> PascalCase).
-$schemaFile = Get-ChildItem ".\src\DataSchemas\*.json" | Select-Object -First 1
-if (-not $schemaFile) { throw "No JSON schema found in .\src\DataSchemas\. Run 'uv run regenerate-schemas' first." }
-$namespace = ($schemaFile.BaseName -split "_" | ForEach-Object { $_.Substring(0,1).ToUpper() + $_.Substring(1) }) -join ""
-
-Write-Output "Generating C# classes (namespace: $namespace, serializers: json yaml)..."
-Push-Location .\src\Extensions
-&dotnet bonsai.sgen $schemaFile.FullName --namespace $namespace --serializer json --serializer yaml
-Pop-Location
-
-Write-Output "Writing the rig configuration template..."
-&uv run python examples/rig.py
+# One command for everything derived from the models: the JSON schema, the C# classes and the
+# rig template. The namespace of the C# classes follows the schema file name.
+Write-Output "Regenerating the schema, the C# classes and the rig template..."
+&uv run regenerate
+if ($LASTEXITCODE -ne 0) { throw "regenerate failed; see the output above." }
 
 # Same name the rig workflow resolves at startup (Environment.MachineName).
 $machineDirectory = Join-Path $ConfigRoot ([Environment]::MachineName)
@@ -64,11 +61,4 @@ if (Test-Path -Path $rigConfig) {
     $text = $text.Replace('$schema=../src/DataSchemas/', '$schema=' + $schemaDirectory + '/')
     [IO.File]::WriteAllText($rigConfig, $text)
     Write-Output "Created $rigConfig from config\rig-template.yml; fill in this rig's values there."
-}
-
-if (-not (Test-Path -Path src\DataSchemas)) {
-    New-Item -ItemType Directory -Path src\DataSchemas | Out-Null
-}
-if (-not (Test-Path -Path src\Extensions)) {
-    New-Item -ItemType Directory -Path src\Extensions | Out-Null
 }

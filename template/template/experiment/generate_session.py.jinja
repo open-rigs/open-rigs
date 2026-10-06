@@ -1,0 +1,47 @@
+"""Write an example session record: the per-run metadata that belongs to neither the rig nor the task.
+
+A session record names the subject, the session and the code that ran (workflow, commit, repository).
+This script writes one to local/session.yml, which git ignores. The file shows the shape and
+validates against the schema. The starting workflow takes SubjectId and SessionId as properties for
+now; adopt this record once a session tool fills it in for every run.
+"""
+
+import subprocess
+from pathlib import Path
+
+from open_rigs.core import ExperimentSession, yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_PATH = ROOT / "local" / "session.yml"
+SCHEMA_PATH = "../src/DataSchemas/{{ python_folder_name }}.json#/$defs/ExperimentSession"
+
+
+def current_commit() -> str:
+    """The checked-out commit of this repository, or an empty string when git cannot say."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+    return result.stdout.strip()
+
+
+# Placeholder values only: a session tool fills in the real ones per run.
+session = ExperimentSession(
+    subject_id="CHANGE-ME",
+    session_id="001",
+    workflow="src/main.bonsai",
+    commit=current_commit(),
+    repository_url="",
+)
+
+
+def main(path: Path = OUTPUT_PATH) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    yaml.save(session, path, schema_path=SCHEMA_PATH)
+    print(f"Example session record written to {path}")
+
+
+if __name__ == "__main__":
+    main()
