@@ -7,7 +7,7 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 Push-Location $PSScriptRoot
 try {
-    $bonsaiDir = Join-Path $PSScriptRoot '.bonsai'
+    $bonsaiDir = Join-Path $PSScriptRoot '..\.bonsai'
     $bonsaiExe = Join-Path $bonsaiDir 'Bonsai.exe'
     if (-not (Test-Path $bonsaiExe)) {
         Write-Host "Downloading Bonsai bootstrapper..."
