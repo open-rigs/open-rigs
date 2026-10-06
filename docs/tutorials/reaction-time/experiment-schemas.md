@@ -81,9 +81,9 @@ class OpenRigsReactionTimeTaskLogic(BaseSchema):
 ### Generation
 We now have a complete schematic description of our small experiment example. We will expand on this later, but for now we can start on the Bonsai implementation that will actually run the experiment using these parameters.
 
-The first step is to compile our separate pydantic schemas into a single unified schema, and from this generate C# classes that can be parsed by Bonsai. The `open-rigs` template provides a method for doing the with the `regenerate.py` script. This can be run with:
+The first step is to compile our separate pydantic schemas into a single unified schema, and from this generate C# classes that can be parsed by Bonsai. The `open-rigs` template provides a method for doing this with the `regenerate` command. This can be run with:
 ```
-uv run .\src\open_rigs_implementation_example\regenerate.py
+uv run regenerate
 ```
 
 After this has run, you should see two new files created:

@@ -68,10 +68,10 @@ class <YourProjectName>TaskLogic(BaseSchema):
 ```
 
 ### Generating the Interface
-After writing our experiment schemas in a pydantic model, we need to compile the models together into a `.json` schema description, and use [`sgen`](https://github.com/bonsai-rx/sgen) to automatically write corresponding C# classes that can be used in Bonsai. The template provides a script `regenerate.py` that takes care of these steps:
+After writing our experiment schemas in a pydantic model, we need to compile the models together into a `.json` schema description, and use [`sgen`](https://github.com/bonsai-rx/sgen) to automatically write corresponding C# classes that can be used in Bonsai. The template provides one command, `regenerate`, that takes care of these steps and then writes the rig configuration template:
 
 ```
-uv run .\src\<your-project-name>\regenerate.py
+uv run regenerate
 ```
 
 ### Initialize Git Tracking
@@ -90,10 +90,10 @@ git commit -m "Deploy new open-rigs rig"
 ```
 
 ## Creating Configurations
-We can use our schemas to now generate configuration `.json` files that will be loaded by Bonsai to run our experiment. The template provides 3 example scripts to generate these configurations in the `examples` folder. 
+We can use our schemas to now generate configuration `.json` files that will be loaded by Bonsai to run our experiment. The template provides three generation scripts in the `experiment` folder: `generate_session.py`, `generate_rig.py` and `generate_task.py`. 
 
 ### Session
-`session.py` holds metadata about an experiment session not specific to a given rig or task, including subject id and git repository state. An example valid `session.py` could look like:
+`generate_session.py` holds metadata about an experiment session not specific to a given rig or task, including subject id and git repository state. An example valid `generate_session.py` could look like:
 
 ```
 import datetime
@@ -125,11 +125,11 @@ if __name__ == "__main__":
 Here we mostly populate fields directly with values (e.g. "Plimbo" for the `subject_id`). In other cases, we automate these fields as in the case of `commit` which uses the `git` library to automatically assign the current commit id of the repository. Geneate a settings file from this script with:
 
 ```
-uv run .\examples\session.py
+uv run .\experiment\generate_session.py
 ```
 
 ### Rig
-Similarly, update the `rig.py` script in the `examples` folder to define the Arduino device used in this configuration:
+Similarly, update the `generate_rig.py` script in the `experiment` folder to define the Arduino device used in this configuration:
 
 ```
 import os
@@ -160,11 +160,11 @@ if __name__ == "__main__":
 The main change here is to import the `SerialDevice` class, and set a concrete port parameter for the `arduino` field of the rig. Run this script to produce the rig configuration file:
 
 ```
-uv run .\examples\rig.py
+uv run .\experiment\generate_rig.py
 ```
 
 ### Task
-Repeating the process for the `task.py` script in the `examples` folder:
+Repeating the process for the `generate_task.py` script in the `experiment` folder:
 
 ```
 import os
@@ -198,7 +198,7 @@ if __name__ == "__main__":
 Here we've just updated our task parameters with some concrete values for `inter_trial_interval` and `n_trials`. Run this script to produce the task configuration file:
 
 ```
-uv run .\examples\task.py
+uv run .\experiment\generate_task.py
 ```
 
 ## Bonsai Implementation

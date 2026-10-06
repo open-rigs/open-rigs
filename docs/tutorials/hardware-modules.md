@@ -150,9 +150,9 @@ Using a `Dict[str, ...]` rather than a single instance allows multiple sensors t
 
 ## Part 3: Create a rig configuration
 
-Never write or edit the rig JSON by hand. The Pydantic models are the ground truth for the schema — any manual edits to the JSON will be overwritten the next time you run `examples/rig.py`. Instead, instantiate your schema in Python, populate the fields, and serialize it to JSON. The template generates an `examples/rig.py` script as a starting point for this.
+Never write or edit the rig JSON by hand. The Pydantic models are the ground truth for the schema — any manual edits to the JSON will be overwritten the next time you run `experiment/generate_rig.py`. Instead, instantiate your schema in Python, populate the fields, and serialize it to JSON. The template generates an `experiment/generate_rig.py` script as a starting point for this.
 
-Add your new device to the rig instance in `examples/rig.py`:
+Add your new device to the rig instance in `experiment/generate_rig.py`:
 
 ```python
 from my_project.rig import MyProjectRig, MySensor
@@ -180,15 +180,15 @@ if __name__ == "__main__":
 Run it to produce the JSON file that Bonsai will load:
 
 ```
-uv run examples/rig.py
+uv run experiment/generate_rig.py
 ```
 
 This writes `local/MyProjectRig.json`. The key `"primary"` is the logical name for this device instance — add further entries to the dictionary for additional instances.
 
-After adding a new device to the rig schema, re-run `regenerate.py` to rebuild the C# classes so Bonsai can deserialize the updated schema:
+After adding a new device to the rig schema, re-run `regenerate` to rebuild the C# classes so Bonsai can deserialize the updated schema:
 
 ```
-uv run src/<your_project>/regenerate.py
+uv run regenerate
 ```
 
 ---

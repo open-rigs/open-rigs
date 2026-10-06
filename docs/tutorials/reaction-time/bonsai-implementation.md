@@ -33,12 +33,12 @@ if __name__ == "__main__":
 ```
 I've left the `repository_url` blank, this can be filled in with the correct url if you have a remote repository already set up. I also use the git library to automatically populate the commit hash in this example. Run the script with:
 ```
-uv run examples\session.py
+uv run experiment\generate_session.py
 ```
 You should see a file `Experiment.json` show up in the `local` folder. This is the actual session settings file that will be loaded and deserialized by Bonsai.
 
 ### Rig
-We'll repeat the process for the rig configuration in `examples\rig.py`:
+We'll repeat the process for the rig configuration in `experiment\generate_rig.py`:
 ```
 import os
 
@@ -85,11 +85,11 @@ if __name__ == "__main__":
 
 Here we import the `HarpHobgoblin` schema from `open_rigs` and create an instance inside the rig definition with the USB connection COM port for our machine. The `Screen` settings work slightly differently than other parameters in open-rigs schemas. Because a visual environment can be defined by one to many separate viewports, the calibration for the screen is defined as a dictionary of named parameter sets. In our case we only want to define 1 viewport that covers the entire screen so we create a single entry called `"main"` with some `DisplayExtrinsics` that correspond to the view position, and some `DisplayIntrinsics` that correspond to the height and width of the display as well as the viewport size on screen this will be drawn to. Run this script with:
 ```
-uv run examples\rig.py
+uv run experiment\generate_rig.py
 ```
 
 ### Task
-Finally, we'll define an example experiment in `task.py`:
+Finally, we'll define an example experiment in `experiment\generate_task.py`:
 
 ```
 import os
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
 We set a global maximum trial time of 60s and an initial delay of 5s, and then our sequence of `trial`. Run this script with:
 ```
-uv run examples\task.py
+uv run experiment\generate_task.py
 ```
 
 You should now have 3 `.json` files in the `local` folder that describe a full instance of the reaction time experiment. These are the files that will be loaded by bonsai to manage experiment parameters.
