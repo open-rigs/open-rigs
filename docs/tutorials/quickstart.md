@@ -90,7 +90,12 @@ git commit -m "Deploy new open-rigs rig"
 ```
 
 ## Creating Configurations
-We can use our schemas to now generate configuration `.json` files that will be loaded by Bonsai to run our experiment. The template provides three generation scripts in the `experiment` folder: `generate_session.py`, `generate_rig.py` and `generate_task.py`. 
+A project from the current template keeps its configuration in YAML. `regenerate` writes `config/rig-template.yml` from the rig model, `deploy.ps1` copies it to this machine's folder under `ConfigRoot` as `rig.yml`, and the task parameters live in the committed `config/task.yml`. The starting `main.bonsai` reads both at startup and takes the subject and session as root properties. See [Project Structure](../articles/project-structure.md) and [A Rig on the Platform](../articles/a-rig-on-the-platform.md).
+
+> [!NOTE]
+> The rest of this section, and the reaction-time tutorial, predate the YAML configuration. They generate `.json` files into a `local` folder and load them through path properties on the workflow. The schema classes and the Bonsai side are unchanged; the file handling is being updated.
+
+The template provides three generation scripts in the `experiment` folder: `generate_session.py`, `generate_rig.py` and `generate_task.py`. 
 
 ### Session
 `generate_session.py` holds metadata about an experiment session not specific to a given rig or task, including subject id and git repository state. An example valid `generate_session.py` could look like:

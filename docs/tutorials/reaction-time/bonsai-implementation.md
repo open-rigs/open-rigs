@@ -1,5 +1,8 @@
 # Bonsai Implementation
 
+> [!NOTE]
+> This tutorial predates the YAML configuration that the template now generates. It writes `.json` files into a `local` folder and loads them through path properties on the workflow. The schemas and the Bonsai patterns are current; the file handling is being updated. See [A Rig on the Platform](../../articles/a-rig-on-the-platform.md) for the current startup sequence.
+
 ### Creating Configurations
 The experiment schemas we have created already define the available parameters to set to control our experiment, next we need to create concrete definitions for these parameters that will be loaded into Bonsai. The `open-rigs` template has example scripts for generating these definitions in the `examples` folder.
 

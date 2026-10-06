@@ -2,5 +2,9 @@
   href: introduction.md
 - name: Project Structure
   href: project-structure.md
+- name: A Rig on the Platform
+  href: a-rig-on-the-platform.md
 - name: Calibration
   href: calibration.md
+- name: Streaming
+  href: streaming.md

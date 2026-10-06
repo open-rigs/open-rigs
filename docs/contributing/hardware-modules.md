@@ -1,5 +1,8 @@
 # Adding a New Hardware Module
 
+> [!NOTE]
+> This tutorial predates the YAML configuration that the template now generates. It writes `.json` files into a `local` folder and loads them through path properties on the workflow. The schemas and the Bonsai patterns are current; the file handling is being updated. See [A Rig on the Platform](../articles/a-rig-on-the-platform.md) for the current startup sequence.
+
 This tutorial walks through adding a new hardware module to a open-rigs experiment. Modules will typically be built locally inside your experiment repository first, then migrated to the shared `acquisition` package once they are tested and stable. This tutorial covers the local build only — migration to `acquisition` will be covered in a separate guide.
 
 A hardware module has two complementary parts:
