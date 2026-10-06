@@ -1,7 +1,7 @@
 """End-to-end tests for the copier project template.
 
-These tests generate a new project from `template/`, deploy it with the template's
-deploy script, and run the generated scripts, in the same order as a new user would.
+These tests generate a new project from the template, deploy it with the template's
+deploy script, and run the generation scripts, in the same order as a new user would.
 They need network access to resolve the generated project's dependencies, and the
 same tools as the deploy script: Windows PowerShell, git, uv and the .NET SDK.
 
@@ -10,6 +10,7 @@ Run only these tests with `pytest -m template`, or skip them with `pytest -m "no
 
 import json
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -30,9 +31,9 @@ pytestmark = [
 ]
 
 TEMPLATE_ROOT = Path(__file__).parents[2]  # copier.yml sits at the repository root; its _subdirectory names the body
-EXAMPLES = sorted(
+GENERATORS = sorted(
     path.name.removesuffix(".jinja")
-    for path in (TEMPLATE_ROOT / "template" / "template" / "examples").glob("*.py.jinja")
+    for path in (TEMPLATE_ROOT / "template" / "template" / "experiment").glob("*.py.jinja")
 )
 
 ANSWERS = {
@@ -110,11 +111,12 @@ def test_copy(project: Path):
         "scripts/deploy.ps1",
         "src/main.bonsai",
         "src/Extensions.csproj",
+        "config/task.yml",
         f"src/{PYTHON_FOLDER_NAME}/__init__.py",
         f"src/{PYTHON_FOLDER_NAME}/regenerate.py",
         f"src/{PYTHON_FOLDER_NAME}/rig.py",
         f"src/{PYTHON_FOLDER_NAME}/task.py",
-        *(f"examples/{example}" for example in EXAMPLES),
+        *(f"experiment/{script}" for script in GENERATORS),
     ]
     missing = [path for path in expected if not (project / path).is_file()]
     assert not missing, f"missing files in generated project: {missing}"
@@ -129,6 +131,10 @@ def test_copy(project: Path):
     assert (
         f"class {PYTHON_CLASS_PREFIX}Rig(" in (project / "src" / PYTHON_FOLDER_NAME / "rig.py").read_text()
     )
+
+    workflow = (project / "src" / "main.bonsai").read_text(encoding="utf-8")
+    assert f"clr-namespace:{CSHARP_NAMESPACE};assembly=Extensions" in workflow
+    assert f"{PYTHON_CLASS_PREFIX}Rig" in workflow and f"{PYTHON_CLASS_PREFIX}TaskLogic" in workflow
 
     answers = (project / ".copier-answers.yml").read_text(encoding="utf-8")
     for key, value in ANSWERS.items():
@@ -162,29 +168,67 @@ def test_deploy(project: Path, deploy_result: subprocess.CompletedProcess[str]):
     generated = project / "src" / "Extensions" / f"{CSHARP_NAMESPACE}.Generated.cs"
     assert generated.is_file(), f"the C# classes were not generated\n{describe(deploy_result)}"
 
+    rig_template = project / "config" / "rig-template.yml"
+    assert rig_template.is_file(), f"the rig template was not written\n{describe(deploy_result)}"
+    assert_rig_yaml(rig_template)
+
+    # The template's default ConfigRoot is the repository's own config/rigs folder.
+    machine_rig = project / "config" / "rigs" / platform.node() / "rig.yml"
+    assert machine_rig.is_file(), f"deploy did not create this machine's rig.yml\n{describe(deploy_result)}"
+    assert_rig_yaml(machine_rig)
+
+
+def assert_rig_yaml(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    first_line = text.splitlines()[0]
+    assert first_line.startswith("# yaml-language-server: $schema="), f"{path} has no $schema directive"
+    assert f"$defs/{PYTHON_CLASS_PREFIX}Rig" in first_line, f"{path} points at the wrong schema"
+    assert "rootPath:" in text, f"{path} has no rootPath"
+
 
 def test_regenerate(deployed_project: Path):
     schema_file = deployed_project / "src" / "DataSchemas" / f"{PYTHON_FOLDER_NAME}.json"
     generated = deployed_project / "src" / "Extensions" / f"{CSHARP_NAMESPACE}.Generated.cs"
-    schema_file.unlink(missing_ok=True)
-    generated.unlink(missing_ok=True)
+    rig_template = deployed_project / "config" / "rig-template.yml"
+    for path in (schema_file, generated, rig_template):
+        path.unlink(missing_ok=True)
 
-    result = run(["uv", "run", "regenerate-schemas"], deployed_project)
+    result = run(["uv", "run", "regenerate"], deployed_project)
     assert_success(result)
     assert schema_file.is_file(), f"the JSON schema was not regenerated\n{describe(result)}"
     json.loads(schema_file.read_text(encoding="utf-8"))
     assert generated.is_file(), f"the C# classes were not regenerated\n{describe(result)}"
+    assert rig_template.is_file(), f"the rig template was not regenerated\n{describe(result)}"
 
 
-@pytest.mark.parametrize("example", EXAMPLES)
-def test_example(deployed_project: Path, example: str):
-    output_dir = deployed_project / "local"
-    shutil.rmtree(output_dir, ignore_errors=True)
+def test_generate_session(deployed_project: Path):
+    output = deployed_project / "local" / "session.yml"
+    output.unlink(missing_ok=True)
 
-    result = run(["uv", "run", "python", str(Path("examples") / example)], deployed_project)
+    result = run(["uv", "run", "python", "experiment/generate_session.py"], deployed_project)
     assert_success(result)
+    assert output.is_file(), f"generate_session.py did not write {output}\n{describe(result)}"
+    text = output.read_text(encoding="utf-8")
+    assert "$defs/ExperimentSession" in text.splitlines()[0]
+    assert "subjectId:" in text and "sessionId:" in text
 
-    outputs = sorted(output_dir.glob("*.json"))
-    assert outputs, f"{example} did not write a JSON configuration file to {output_dir}\n{describe(result)}"
-    for output in outputs:
-        json.loads(output.read_text(encoding="utf-8"))
+
+def test_generate_task(deployed_project: Path):
+    # The committed task file is edited by hand and must never be overwritten.
+    existing = deployed_project / "config" / "task.yml"
+    before = existing.read_text(encoding="utf-8")
+    result = run(["uv", "run", "python", "experiment/generate_task.py"], deployed_project)
+    assert result.returncode != 0, f"generate_task.py overwrote the committed task file\n{describe(result)}"
+    assert existing.read_text(encoding="utf-8") == before
+
+    # A new path starts a new protocol's file from the model defaults.
+    new_task = deployed_project / "config" / "task-test.yml"
+    new_task.unlink(missing_ok=True)
+    result = run(
+        ["uv", "run", "python", "experiment/generate_task.py", "config/task-test.yml"], deployed_project
+    )
+    assert_success(result)
+    assert new_task.is_file(), f"generate_task.py did not write {new_task}\n{describe(result)}"
+    text = new_task.read_text(encoding="utf-8")
+    assert f"$defs/{PYTHON_CLASS_PREFIX}TaskLogic" in text.splitlines()[0]
+    assert "taskParameters:" in text
