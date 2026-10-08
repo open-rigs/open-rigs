@@ -19,7 +19,7 @@ flowchart LR
     AS -- "data/*" --> V3["Python dashboard<br/>pyzmq, json"]
 ```
 
-One socket per rig, any number of viewers, and one viewer can watch several rigs. The publisher drops when a viewer falls behind, so the rig is never held up, and the data of the session is still written by the loggers on the rig.
+One socket per rig, any number of viewers, and one viewer can watch several rigs. The publisher drops messages when a viewer falls behind, which means the rig is never held up. The data of the session is still written by the loggers on the rig.
 
 ## 1. Give the rig a socket
 
