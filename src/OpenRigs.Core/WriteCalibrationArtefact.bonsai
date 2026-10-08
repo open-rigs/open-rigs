@@ -60,6 +60,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="io:WriteAllText">
                 <io:Path>calibration.json</io:Path>
+                <io:Overwrite>true</io:Overwrite>
                 <io:Append>false</io:Append>
               </Combinator>
             </Expression>
