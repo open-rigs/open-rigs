@@ -1,6 +1,6 @@
 # open-rigs docs
 
-DocFX site sources for the [open-rigs documentation](https://open-rigs.github.io/open-rigs/).
+DocFX site sources for the [open-rigs documentation](https://open-rigs.org/open-rigs/).
 
 ## Building locally
 

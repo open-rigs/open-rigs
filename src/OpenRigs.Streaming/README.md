@@ -30,4 +30,4 @@ Installed with the package: `Bonsai.Core`, `Bonsai.Dsp`, `Bonsai.Scripting.Expre
 
 ## Documentation
 
-<https://open-rigs.github.io/open-rigs/bonsai-operators/OpenRigs.Streaming/streaming.html>
+<https://open-rigs.org/open-rigs/bonsai-operators/OpenRigs.Streaming/streaming.html>

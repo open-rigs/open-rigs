@@ -62,7 +62,7 @@
       "template"
     ],
     "sitemap": {
-      "baseUrl": "https://open-rigs.github.io/open-rigs"
+      "baseUrl": "https://open-rigs.org/open-rigs"
     },
     "globalMetadata": {
       "_appName": "OpenRigs",

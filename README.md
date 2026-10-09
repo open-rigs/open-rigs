@@ -2,7 +2,7 @@
 
 Repository for the open-rigs ecosystem: shared rig schemas (Python), Bonsai acquisition operators (.NET), and a Copier template used to scaffold new experiment repositories.
 
-Full documentation, including tutorials and API reference, is published at **https://open-rigs.github.io/open-rigs** (deployed on release).
+Full documentation, including tutorials and API reference, is published at **https://open-rigs.org/open-rigs** (deployed on release).
 
 ## Prerequisites
 
