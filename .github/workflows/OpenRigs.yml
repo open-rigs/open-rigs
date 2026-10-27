@@ -99,7 +99,8 @@ jobs:
 
       # -------------------------------------------------------- Coverage report
       - name: Upload test coverage report to codecov
-        if: ${{ matrix.codecov }}
+        # Disabled until CODECOV_TOKEN is configured for open-rigs/open-rigs; restore `if: ${{ matrix.codecov }}` to re-enable
+        if: false
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
