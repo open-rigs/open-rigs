@@ -97,7 +97,15 @@ namespace OpenRigs.Video
 
         public IObservable<Timestamped<VideoDataFrame>> Generate<TPayload>(IObservable<Timestamped<TPayload>> source)
         {
-            var frames = Generate();
+            return Generate(source, Observable.Return(System.Reactive.Unit.Default));
+        }
+
+        // The camera subscribes to start once it is initialized and configured, then begins acquisition
+        // as soon as start emits. A start sequence that reports readiness lets the workflow hold the
+        // trigger output until every camera has reached that point.
+        public IObservable<Timestamped<VideoDataFrame>> Generate<TPayload, TStart>(IObservable<Timestamped<TPayload>> source, IObservable<TStart> start)
+        {
+            var frames = base.Generate(start);
             // Copy the chunk fields while still inside the camera callback. Spinnaker releases the
             // native chunk data as soon as OnNext returns, and a frame waiting in the Zip below
             // would otherwise read freed memory.
