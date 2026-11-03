@@ -18,4 +18,7 @@ The `.bonsai` file in `src/OpenRigs.Devices/` is a thin reusable group around th
 ![TriggeredSpinnaker](~/assets/workflows-static/devices/TriggeredSpinnaker.svg){data-bonsai="~/assets/workflows-static/devices/TriggeredSpinnaker.bonsai"}
 :::
 
-The workflow instantiates the `TriggeredSpinnaker` operator with the configured camera index, publishes the frame stream on a named subject, and forwards each frame's `VideoDataFrame` to downstream consumers (display, encoders, writers). Combine this module with a Behavior Board `CameraTriggerController` to produce a deterministic, Harp-timestamped video stream.
+The workflow passes the camera trigger events into the `TriggeredSpinnaker` operator, publishes the frame stream on a named subject, and forwards each frame's `VideoDataFrame` to downstream consumers (display, encoders, writers). Combine this module with a Behavior Board `CameraTriggerController` to produce a deterministic, Harp-timestamped video stream.
+
+The operator pairs each frame with the next trigger event in arrival order. It copies the chunk data (`FrameID`, `Timestamp`, `ExposureTime`, `Gain`) inside the camera callback and fills dropped frames by `FrameID`, which keeps the pairing aligned for the rest of the session.
+

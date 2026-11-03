@@ -98,8 +98,15 @@ namespace OpenRigs.Video
         public IObservable<Timestamped<VideoDataFrame>> Generate<TPayload>(IObservable<Timestamped<TPayload>> source)
         {
             var frames = Generate();
+            // Copy the chunk fields while still inside the camera callback. Spinnaker releases the
+            // native chunk data as soon as OnNext returns, and a frame waiting in the Zip below
+            // would otherwise read freed memory.
             return frames
-                .Select(frame => new VideoDataFrame(frame.Image, frame.ChunkData.FrameID, frame.ChunkData.Timestamp))
+                .Select(frame => new VideoDataFrame(frame.Image, new VideoChunkData(
+                    frame.ChunkData.FrameID,
+                    frame.ChunkData.Timestamp,
+                    frame.ChunkData.ExposureTime,
+                    frame.ChunkData.Gain)))
                 .FillGaps(frame => frame.ChunkData.FrameID, (previous, current) => (int)(current - previous - 1))
                 .Zip(source, (frame, payload) => Timestamped.Create(frame, payload.Seconds))
                 .Where(timestamped => timestamped.Value != null);
