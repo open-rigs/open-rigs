@@ -11,6 +11,7 @@ The LicketySplit (`who_am_i = 1400`) is a Harp lick detector. It samples one or 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `port_name` | `str` | - | Serial port the device is connected to (e.g. `COM3`) |
+| `synchronize_clock` | `bool` | `False` | Set the device's clock to the host's UTC time on connecting, before the register dump. Turn off when a clock synchroniser drives the clock input. |
 | `channel0_trigger_threshold` | `UShort` | `0` | ADC threshold above which Channel 0 triggers a lick |
 | `channel0_untrigger_threshold` | `UShort` | `0` | ADC threshold below which Channel 0 untriggers a lick |
 
@@ -47,4 +48,4 @@ lick_detector:
 ![LicketySplit](~/assets/workflows/devices/LicketySplit.svg){data-bonsai="~/src/OpenRigs.Devices/LicketySplit.bonsai"}
 :::
 
-The workflow opens the Harp serial connection, writes the configured thresholds at startup, and publishes the device event stream on a named `PublishSubject`. Downstream nodes can subscribe to that subject to extract the lick trigger events stamped against the Harp hardware clock.
+The workflow opens the Harp serial connection and publishes the device event stream on a named `PublishSubject`. On connecting it sends the startup sequence: optionally a `SynchronizeTimestamp` write (when `SynchronizeClock` is true), then an `OperationControl` write to request the register dump. Events are published from the `OperationControl` write reply onwards. Once the first dump event arrives, the workflow writes the configured trigger and untrigger thresholds to the device. Turn `SynchronizeClock` off when a clock synchroniser drives the clock input.
