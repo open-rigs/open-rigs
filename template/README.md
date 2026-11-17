@@ -105,7 +105,42 @@ git commit -m "Deploy new open-rigs rig"
 git push -u origin main
 ```
 
-### 5. Run the `deploy` script
+### 5. Set up GitHub Packages authentication
+
+The `OpenRigs.*` Bonsai packages are hosted on GitHub Packages and require a token to download,
+even though the repository is public. Without this step the deploy script will fail to restore packages.
+
+**Get a token:**
+
+```powershell
+gh auth refresh -s read:packages
+gh auth token
+```
+
+Use a classic PAT (`ghp_...`) or the token printed by `gh auth token`. Fine-grained tokens do not
+work reliably with GitHub Packages.
+
+**Set the token for the current session** (simplest option):
+
+```powershell
+$env:GITHUB_PACKAGES_TOKEN = "<paste token here>"
+```
+
+**Set it permanently** (recommended for regular use): add the credentials to your user-level NuGet
+config at `%AppData%\NuGet\NuGet.config` under `packageSourceCredentials`, keyed `github-open-rigs`:
+
+```xml
+<github-open-rigs>
+  <add key="Username" value="open-rigs" />
+  <add key="ClearTextPassword" value="<your token>" />
+</github-open-rigs>
+```
+
+Your account must also have read access to `open-rigs/open-rigs`.
+
+---
+
+### 6. Run the `deploy` script
 
 ``` 
 ./scripts/deploy.cmd

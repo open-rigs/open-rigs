@@ -67,5 +67,9 @@ python_class_prefix:
 rigs_version:
   type: str
   default: "0.1.0"
-  help: Version of open-rigs/open-rigs packages to use (OpenRigs.* NuGet packages)
-  when: false
+  help: >-
+    Version of the OpenRigs.* NuGet packages to pin in Bonsai.config.
+    Use a stable release tag (e.g. 0.1.0) or a CI pre-release string
+    (e.g. 0.0.0-main-ci42) from https://github.com/orgs/open-rigs/packages.
+    CI pre-releases require a GitHub Packages token — see template/README.md.
+  when: true

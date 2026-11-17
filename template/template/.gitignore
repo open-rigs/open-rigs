@@ -15,6 +15,7 @@ Bonsai/Settings/
 *.editor
 local
 .venv
+.bonsai/NuGet.config
 
 
 # Byte-compiled / optimized / DLL files
