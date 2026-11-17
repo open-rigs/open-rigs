@@ -29,8 +29,7 @@ For full hardware specs and configuration details, see the [official repository]
 | **Property Name**       | **Input/Output** | **Description**                                                           |
 |-------------------------|------------------|---------------------------------------------------------------------------|
 | `PortName`              | Input            | Serial port used to communicate with the device (e.g., COM14).            |
-| `DumpRegisters`         | Input            | Whether to dump register values from the device at startup.               |
-| `Heartbeat`             | Input            | Whether to enable heartbeat messages from the device.                     |
+| `SynchronizeClock`      | Input            | Whether to set the board's clock to the host's UTC time on connecting.    |
 ## Dependencies
 ### Bonsai:
 
