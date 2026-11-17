@@ -24,6 +24,13 @@ class TimerFrequency(StrEnum):
 class HarpDevice(BaseSchema):
     who_am_i: ClassVar[int] = Field(description="The unique identifier for the device type.")
     port_name: str = Field(examples=["COM"], description="The name of the device serial port.")
+    synchronize_clock: bool = Field(
+        default=False,
+        description=(
+            "Set the device's clock to the host's UTC time on connecting, before the register dump. "
+            "Turn off when a clock synchroniser drives the clock input."
+        ),
+    )
 
 
 class HarpClockSynchronizer(HarpDevice):

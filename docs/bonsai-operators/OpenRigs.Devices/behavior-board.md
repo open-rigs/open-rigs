@@ -11,6 +11,7 @@ The Behavior Board (`who_am_i = 1216`) is a Harp board commonly used as an I/O h
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `port_name` | `str` | - | Serial port the device is connected to (e.g. `COM3`) |
+| `synchronize_clock` | `bool` | `False` | Set the board's clock to the host's UTC time on connecting, before the register dump. Turn off when a clock synchroniser drives the clock input. |
 | `pulse_controller` | `PulseController \| None` | `None` | Optional module for generating digital output pulses (e.g. valve opens) |
 | `camera_trigger_controller` | `CameraTriggerController \| None` | `None` | Optional module for emitting camera trigger pulses |
 | `running_wheel` | `RunningWheel \| None` | `None` | Optional running wheel geometry, used to convert encoder counts to speed and distance |
@@ -65,6 +66,8 @@ class Rig(...):
 :::
 
 The top-level workflow opens the Harp serial connection, publishes the raw event stream on a named subject, and routes events into the nested sub-workflows below. Each sub-workflow exposes its own subject names so downstream nodes can subscribe to just the streams they need.
+
+On connecting, the workflow sends the startup sequence to the device: optionally a `SynchronizeTimestamp` write (when `SynchronizeClock` is true) to set the board's clock to the host's UTC time, then an `OperationControl` write to request the register dump. Events are published from the `OperationControl` write reply onwards, so the dump and all subsequent data are on the same clock. Without clock synchronisation a board that has been powered on for 3.7 days names its files `1904-01-04T17-00-00`. Turn `SynchronizeClock` off when a hardware clock synchroniser drives the board's clock input: the synchroniser sets the board's clock every second, and a host write would be overwritten within a second.
 
 ## Sub-operators
 
